@@ -1,35 +1,52 @@
-@import './base.css';
+/* color variables for this project */
+:root {
+  --color-background: rgb(44, 55, 80);
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  --color-map: rgba(53, 95, 79, 0.8);
+  --color-map-highlight: rgba(110, 173, 98, 0.8);
+  --color-map-click: rgba(110, 173, 98, 1);
+
+  --color-border: rgba(226, 226, 226, 0.29);
+
+  --color-heading: var(--indigo);
+  --color-text: rgba(60, 60, 60, 0.66);
+
+  --section-gap: 10rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
   font-weight: normal;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  font-size: 16px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+#app {
+  margin: 0 auto;
+  padding: 0;
+  font-weight: normal;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+path {
+  fill: var(--color-map);
+  cursor: pointer;
+  transition: fill 0.4s;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+path:hover {
+  fill: var(--color-map-highlight);
 }

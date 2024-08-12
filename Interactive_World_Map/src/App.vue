@@ -1,43 +1,21 @@
 <script setup>
-import MapSelection from './components/MapSelection.vue';
-import SelectionOutput from './components/SelectionOutput.vue';
-
-
+import Map from './components/Map.vue';
+import Selection from './components/SelectionOutput.vue'
 </script>
 
 <template>
-  <header>
-
-  </header>
-
   <main>
-    <section></section>
+    <section>
+      <Map></Map>
+    </section>
 
-    <section></section>
+    <section>
+      <Selection></Selection>
+    </section>
   </main>
 
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
