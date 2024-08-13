@@ -3,6 +3,7 @@
     import MapImage from '../assets/map-image.svg?raw';
 
     const clicked_coutries = new Set();
+    const current_country = ref('');
     const tooltip_text = ref('');
     const tooltip_pos = reactive({
         top: 0,
@@ -11,8 +12,9 @@
 
     function handleSvgClick(event) {
         const element = event.target;
-        const countryName = element.getAttribute('name');
         const countryId = element.getAttribute('id');
+
+        current_country.value = element.getAttribute('name');
         if (element.tagName == 'path') {
             if (clicked_coutries.has(countryId)) {
                 element.style.fill = "";
@@ -44,6 +46,7 @@
 </template>
 
 <style scoped>
+
     .svg-image{
         margin: 3rem;
     }
@@ -55,5 +58,7 @@
         background-color: var(--color-background);
         color: var(--color-map-selected);
         padding: 0.25rem;
+        font-weight: 700;
     }
+
 </style>
