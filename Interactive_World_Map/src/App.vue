@@ -17,5 +17,5 @@ import Selection from './components/SelectionOutput.vue'
 </template>
 
 <style scoped>
-
+  
 </style>
