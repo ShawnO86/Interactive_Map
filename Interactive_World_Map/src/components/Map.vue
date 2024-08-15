@@ -12,9 +12,8 @@
 
     function handleSvgClick(event) {
         const element = event.target;
-        const countryId = element.getAttribute('id');
-
-        current_country.value = element.getAttribute('name');
+        const countryId = element.id;
+        current_country.value = element.name;
         if (element.tagName == 'path') {
             if (clicked_coutries.has(countryId)) {
                 element.style.fill = "";
@@ -30,7 +29,7 @@
     function displayTip(event) {
         const element = event.target;
         if (element.tagName == 'path') {
-            tooltip_text.value = element.getAttribute('name');
+            tooltip_text.value = element.name;
             tooltip_pos.top = event.clientY - 24;
             tooltip_pos.left = event.clientX;
         } else {
@@ -42,7 +41,7 @@
 
 <template>
     <div class="svg-image" v-html="MapImage" @click="handleSvgClick" @mousemove="displayTip"></div>
-    <div class="tooltip" :style="{top: tooltip_pos.top + 'px', left: tooltip_pos.left + 'px'}">{{ tooltip_text }}</div>
+    <div class="tooltip" v-if="tooltip_text" :style="{top: tooltip_pos.top + 'px', left: tooltip_pos.left + 'px'}">{{ tooltip_text }}</div>
 </template>
 
 <style scoped>
