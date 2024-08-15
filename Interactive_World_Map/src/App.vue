@@ -5,7 +5,7 @@ import Selection from './components/SelectionOutput.vue'
 
 <template>
   
-    <section>
+    <section class="map">
       <Map></Map>
     </section>
 
@@ -16,5 +16,10 @@ import Selection from './components/SelectionOutput.vue'
 </template>
 
 <style scoped>
-  
+  .map {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>

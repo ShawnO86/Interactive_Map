@@ -4,12 +4,14 @@ import MapImage from '../assets/map-image.svg?raw';
 
 const tooltip_text = ref('');
 const country_svg = ref('');
+
 const country_pos = reactive({
     x: 0,
     y: 0,
     width: 0,
     height: 0
 });
+
 const tooltip_pos = reactive({
     top: 0,
     left: 0
@@ -32,26 +34,17 @@ function handleSvgClick(event) {
         const bBox = element.getBBox();
         // Set zoomed SVG content and adjust viewBox
         country_svg.value = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${bBox.x} ${bBox.y} ${bBox.width} ${bBox.height}" class='zoomed-in'>${element.outerHTML}</svg>`;
-        country_pos.x = bBox.x;
-        country_pos.y = bBox.y;
-        country_pos.width = bBox.width;
-        country_pos.height = bBox.height;
     }
 };
 
 function backout() {
         // Reset back to full map
         country_svg.value = '';
-        country_pos.x = 0;
-        country_pos.y = 0;
-        country_pos.width = 0;
-        country_pos.height = 0;
 };
 
 </script>
 
 <template>
-   
     <div class="map-container" @click="handleSvgClick" @mousemove="displayTip" >
         <button v-if="country_svg" @click="backout">Back to map</button>
         <div class="zoomed-svg" v-if="country_svg" v-html="country_svg"></div>
@@ -65,16 +58,13 @@ function backout() {
 </template>
 
 <style scoped>
-
 .map-container {
-    width: 100%;
-    max-width: 90vw;
-    height: 99vh; 
-    padding: 3rem;
+    width: 90%;
+    height: 90%;
 }
 
 .svg-image, .zoomed-svg {
-    width: 100%;
+    margin: auto;
     height: 100%;
 }
 
@@ -87,5 +77,4 @@ function backout() {
     padding: 0.25rem;
     font-weight: 700;
 }
-
 </style>
