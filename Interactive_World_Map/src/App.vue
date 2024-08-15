@@ -4,7 +4,7 @@ import Selection from './components/SelectionOutput.vue'
 </script>
 
 <template>
-  <main>
+  
     <section>
       <Map></Map>
     </section>
@@ -12,7 +12,6 @@ import Selection from './components/SelectionOutput.vue'
     <section>
       <Selection></Selection>
     </section>
-  </main>
 
 </template>
 

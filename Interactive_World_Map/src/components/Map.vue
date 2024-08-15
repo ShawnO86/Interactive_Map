@@ -1,63 +1,91 @@
 <script setup>
-    import { ref, reactive } from 'vue';
-    import MapImage from '../assets/map-image.svg?raw';
+import { ref, reactive } from 'vue';
+import MapImage from '../assets/map-image.svg?raw';
 
-    const clicked_coutries = new Set();
-    const current_country = ref('');
-    const tooltip_text = ref('');
-    const tooltip_pos = reactive({
-        top: 0,
-        left: 0
-    });
+const tooltip_text = ref('');
+const country_svg = ref('');
+const country_pos = reactive({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0
+});
+const tooltip_pos = reactive({
+    top: 0,
+    left: 0
+});
 
-    function handleSvgClick(event) {
-        const element = event.target;
-        const countryId = element.id;
-        current_country.value = element.name;
-        if (element.tagName == 'path') {
-            if (clicked_coutries.has(countryId)) {
-                element.style.fill = "";
-                clicked_coutries.delete(countryId);
-            } else {
-                element.style.fill = "var(--color-map-selected)";
-                clicked_coutries.add(countryId);
-            }
-        } 
-        console.log(clicked_coutries);
-    };
+function displayTip(event) {
+    const element = event.target;
+    if (element.tagName == 'path') {
+        tooltip_text.value = element.getAttribute('name');
+        tooltip_pos.top = event.clientY - 24;
+        tooltip_pos.left = event.clientX;
+    } else {
+        tooltip_text.value = '';
+    }
+};
 
-    function displayTip(event) {
-        const element = event.target;
-        if (element.tagName == 'path') {
-            tooltip_text.value = element.name;
-            tooltip_pos.top = event.clientY - 24;
-            tooltip_pos.left = event.clientX;
-        } else {
-            tooltip_text.value = '';
-        }
-    };
+function handleSvgClick(event) {
+    const element = event.target;
+    if (element.tagName == 'path') {
+        const bBox = element.getBBox();
+        // Set zoomed SVG content and adjust viewBox
+        country_svg.value = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${bBox.x} ${bBox.y} ${bBox.width} ${bBox.height}" class='zoomed-in'>${element.outerHTML}</svg>`;
+        country_pos.x = bBox.x;
+        country_pos.y = bBox.y;
+        country_pos.width = bBox.width;
+        country_pos.height = bBox.height;
+    }
+};
+
+function backout() {
+        // Reset back to full map
+        country_svg.value = '';
+        country_pos.x = 0;
+        country_pos.y = 0;
+        country_pos.width = 0;
+        country_pos.height = 0;
+};
 
 </script>
 
 <template>
-    <div class="svg-image" v-html="MapImage" @click="handleSvgClick" @mousemove="displayTip"></div>
-    <div class="tooltip" v-if="tooltip_text" :style="{top: tooltip_pos.top + 'px', left: tooltip_pos.left + 'px'}">{{ tooltip_text }}</div>
+   
+    <div class="map-container" @click="handleSvgClick" @mousemove="displayTip" >
+        <button v-if="country_svg" @click="backout">Back to map</button>
+        <div class="zoomed-svg" v-if="country_svg" v-html="country_svg"></div>
+        <div class="svg-image" v-else v-html="MapImage"></div>
+    </div>
+
+    <div class="tooltip" v-if="tooltip_text" 
+        :style="{ top: tooltip_pos.top + 'px', left: tooltip_pos.left + 'px' }">
+        {{ tooltip_text }}
+    </div>
 </template>
 
 <style scoped>
 
-    .svg-image{
-        margin: 3rem;
-    }
+.map-container {
+    width: 100%;
+    max-width: 90vw;
+    height: 99vh; 
+    padding: 3rem;
+}
 
-    .tooltip {
-        position: absolute;
-        z-index: 5;
-        pointer-events: none;
-        background-color: var(--color-background);
-        color: var(--color-map-selected);
-        padding: 0.25rem;
-        font-weight: 700;
-    }
+.svg-image, .zoomed-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.tooltip {
+    position: absolute;
+    z-index: 5;
+    pointer-events: none;
+    background-color: var(--color-background);
+    color: var(--color-map-selected);
+    padding: 0.25rem;
+    font-weight: 700;
+}
 
 </style>
