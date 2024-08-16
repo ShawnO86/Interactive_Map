@@ -4,13 +4,7 @@ import MapImage from '../assets/map-image.svg?raw';
 
 const tooltip_text = ref('');
 const country_svg = ref('');
-
-const country_pos = reactive({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0
-});
+const scale = ref(1);
 
 const tooltip_pos = reactive({
     top: 0,
@@ -42,13 +36,16 @@ function backout() {
         country_svg.value = '';
 };
 
+
 </script>
 
 <template>
-    <div class="map-container" @click="handleSvgClick" @mousemove="displayTip" >
+    <div class="map-container" @click="handleSvgClick" @mousemove="displayTip">
         <button v-if="country_svg" @click="backout">Back to map</button>
-        <div class="zoomed-svg" v-if="country_svg" v-html="country_svg"></div>
-        <div class="svg-image" v-else v-html="MapImage"></div>
+        <div class="svg-wrapper" :style="{transform: `scale(${scale})`}">
+            <div class="zoomed-svg" v-if="country_svg" v-html="country_svg"></div>
+            <div class="svg-image" v-else v-html="MapImage"></div>
+        </div>
     </div>
 
     <div class="tooltip" v-if="tooltip_text" 
@@ -59,8 +56,18 @@ function backout() {
 
 <style scoped>
 .map-container {
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    border: 10px solid black;
+}
+
+.svg-wrapper {
+  transform-origin: center center; /* Ensure the zoom happens from the center */
+  display: block; /* Ensure the SVG scales properly */
+  width: 100%;
+  height: 100%;
+  transition: transform 0.2s ease; /* Smooth zoom effect */
 }
 
 .svg-image, .zoomed-svg {
