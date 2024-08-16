@@ -11,8 +11,6 @@
   --color-border-selected: rgba(0, 0, 0, 1);
 
   --color-text: rgba(60, 60, 60, 0.66);
-
-  --section-gap: 10rem;
 }
 
 *,
@@ -37,6 +35,13 @@ body {
   font-weight: normal;
 }
 
+svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+}
+
 path {
   fill: var(--color-map);
   stroke: var(--color-border);
@@ -48,21 +53,4 @@ path {
 path:hover {
   fill: var(--color-map-highlight);
   stroke: var(--color-border-highlight);
-}
-
-.zoomed-in {
-  width: 100%;
-  height: 100%;
-}
-
-.zoomed-in path {
-  stroke: none;
-}
-
-.zoom {
-  transform: scale(1.5);
-}
-
-.hide {
-  display: none;
 }

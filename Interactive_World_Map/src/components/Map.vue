@@ -4,7 +4,6 @@ import MapImage from '../assets/map-image.svg?raw';
 
 const tooltip_text = ref('');
 const country_svg = ref('');
-const scale = ref(1);
 
 const tooltip_pos = reactive({
     top: 0,
@@ -22,6 +21,7 @@ function displayTip(event) {
     }
 };
 
+//send this to a router for a new page, then use name to get more info from api.
 function handleSvgClick(event) {
     const element = event.target;
     if (element.tagName == 'path') {
@@ -32,8 +32,8 @@ function handleSvgClick(event) {
 };
 
 function backout() {
-        // Reset back to full map
-        country_svg.value = '';
+    // Reset back to full map
+    country_svg.value = '';
 };
 
 
@@ -41,38 +41,42 @@ function backout() {
 
 <template>
     <div class="map-container" @click="handleSvgClick" @mousemove="displayTip">
-        <button v-if="country_svg" @click="backout">Back to map</button>
-        <div class="svg-wrapper" :style="{transform: `scale(${scale})`}">
-            <div class="zoomed-svg" v-if="country_svg" v-html="country_svg"></div>
-            <div class="svg-image" v-else v-html="MapImage"></div>
+        <div class="country-svg-wrapper" v-if="country_svg">
+            <button @click="backout">Back to map</button>
+            <div class="zoomed-svg" v-html="country_svg"></div>
+        </div>
+        <div class="map-svg-wrapper" v-else>
+            <div class="svg-image" v-html="MapImage"></div>
         </div>
     </div>
 
-    <div class="tooltip" v-if="tooltip_text" 
-        :style="{ top: tooltip_pos.top + 'px', left: tooltip_pos.left + 'px' }">
+    <div class="tooltip" v-if="tooltip_text" :style="{ top: tooltip_pos.top + 'px', left: tooltip_pos.left + 'px' }">
         {{ tooltip_text }}
     </div>
 </template>
 
 <style scoped>
 .map-container {
+    height: 100vh;
     width: 100%;
-    height: 100%;
-    padding: 1rem;
-    border: 10px solid black;
 }
 
-.svg-wrapper {
-  transform-origin: center center; /* Ensure the zoom happens from the center */
-  display: block; /* Ensure the SVG scales properly */
-  width: 100%;
-  height: 100%;
-  transition: transform 0.2s ease; /* Smooth zoom effect */
+.map-svg-wrapper {
+    height: 100%;
 }
 
-.svg-image, .zoomed-svg {
-    margin: auto;
+.country-svg-wrapper {
+    height: 95%;
+    padding: 1.5rem;
+}
+
+.svg-image {
     height: 100%;
+    position: relative;
+}
+.zoomed-svg {
+    height: 100%;
+    position: relative;
 }
 
 .tooltip {
