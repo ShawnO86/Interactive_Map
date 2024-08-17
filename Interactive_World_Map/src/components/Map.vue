@@ -4,7 +4,14 @@ import MapImage from '../assets/map-image.svg?raw';
 import SelectionOutput from './SelectionOutput.vue';
 
 const tooltip_text = ref('');
-const country_svg = ref('');
+
+const countrySvg = reactive({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    html: ''
+});
 
 const tooltip_pos = reactive({
     top: 0,
@@ -28,27 +35,31 @@ function handleSvgClick(event) {
     if (element.tagName == 'path') {
         const bBox = element.getBBox();
         // Set zoomed SVG content and adjust viewBox
-        country_svg.value = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${bBox.x} ${bBox.y} ${bBox.width} ${bBox.height}" class='zoomed-in'>${element.outerHTML}</svg>`;
+        countrySvg.x = bBox.x;
+        countrySvg.y = bBox.y;
+        countrySvg.width = bBox.width;
+        countrySvg.height = bBox.height;
+        countrySvg.html = element.outerHTML;
     }
 };
 
 function backout() {
     // Reset back to full map
     //in selection_output will just route to root path.
-    country_svg.value = '';
+    countrySvg.x = 0;
+    countrySvg.y = 0;
+    countrySvg.width = 0;
+    countrySvg.height = 0;
+    countrySvg.html = "";
 };
-
 
 </script>
 
 <template>
     <div class="map-container" @click="handleSvgClick" @mousemove="displayTip">
-        <div class="country-svg-wrapper" v-if="country_svg">
+        <div class="country-svg-wrapper" v-if="countrySvg.html">
             <button @click="backout">Back to map</button>
-            <!-- <div class="zoomed-svg" v-html="country_svg"></div> -->
-                <SelectionOutput
-                :countrySVG
-                ></SelectionOutput>
+            <SelectionOutput :countrySvg="countrySvg" />
         </div>
         <div class="map-svg-wrapper" v-else>
             <div class="svg-image" v-html="MapImage"></div>
@@ -79,6 +90,7 @@ function backout() {
     height: 100%;
     position: relative;
 }
+
 .zoomed-svg {
     height: 100%;
     position: relative;
@@ -93,4 +105,5 @@ function backout() {
     padding: 0.25rem;
     font-weight: 700;
 }
+
 </style>
