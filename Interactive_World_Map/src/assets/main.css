@@ -54,3 +54,8 @@ path:hover {
   fill: var(--color-map-highlight);
   stroke: var(--color-border-highlight);
 }
+
+.zoomed-in > path {
+  stroke: none;
+}
+

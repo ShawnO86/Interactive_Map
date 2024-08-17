@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import MapImage from '../assets/map-image.svg?raw';
+import SelectionOutput from './SelectionOutput.vue';
 
 const tooltip_text = ref('');
 const country_svg = ref('');
@@ -44,7 +45,10 @@ function backout() {
     <div class="map-container" @click="handleSvgClick" @mousemove="displayTip">
         <div class="country-svg-wrapper" v-if="country_svg">
             <button @click="backout">Back to map</button>
-            <div class="zoomed-svg" v-html="country_svg"></div>
+            <!-- <div class="zoomed-svg" v-html="country_svg"></div> -->
+                <SelectionOutput
+                :countrySVG
+                ></SelectionOutput>
         </div>
         <div class="map-svg-wrapper" v-else>
             <div class="svg-image" v-html="MapImage"></div>
@@ -68,7 +72,7 @@ function backout() {
 
 .country-svg-wrapper {
     height: 95%;
-    padding: 1.5rem;
+    padding: 1rem;
 }
 
 .svg-image {

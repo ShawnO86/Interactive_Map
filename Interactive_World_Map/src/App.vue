@@ -4,14 +4,14 @@
 
 <template>
   
-    <section class="map">
+    <section class="cur-page">
       <RouterView />
     </section>
 
 </template>
 
 <style scoped>
-  .map {
+  .cur-page {
     height: 100vh;
     display: flex;
     justify-content: center;
