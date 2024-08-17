@@ -1,16 +1,11 @@
 <script setup>
-import Map from './components/Map.vue';
-import Selection from './components/SelectionOutput.vue'
+
 </script>
 
 <template>
   
     <section class="map">
-      <Map></Map>
-    </section>
-
-    <section>
-      <Selection></Selection>
+      <RouterView />
     </section>
 
 </template>

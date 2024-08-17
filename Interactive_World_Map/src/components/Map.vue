@@ -21,7 +21,7 @@ function displayTip(event) {
     }
 };
 
-//send this to a router for a new page, then use name to get more info from api.
+//emit the country_svg to selection_output component and use router to get to it.
 function handleSvgClick(event) {
     const element = event.target;
     if (element.tagName == 'path') {
@@ -33,6 +33,7 @@ function handleSvgClick(event) {
 
 function backout() {
     // Reset back to full map
+    //in selection_output will just route to root path.
     country_svg.value = '';
 };
 
