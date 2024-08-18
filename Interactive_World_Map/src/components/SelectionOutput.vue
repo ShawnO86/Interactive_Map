@@ -24,6 +24,10 @@ const svgViewBox = computed(() => {
 </template>
 
 <style scoped>
-
+.zoomed-svg {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
 </style>
 
