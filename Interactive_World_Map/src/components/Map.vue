@@ -38,6 +38,7 @@ function handleSvgClick(event) {
             y: bBox.y,
             width: bBox.width,
             height: bBox.height,
+            name: element.getAttribute('name'),
             html: element.outerHTML
         };
 

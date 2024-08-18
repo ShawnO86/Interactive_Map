@@ -10,6 +10,7 @@ const countrySelection = reactive({
   y: 0,
   width: 0,
   height: 0,
+  name: '',
   html: ''
 });
 
@@ -22,8 +23,8 @@ function getSvg(countrySvg) {
   countrySelection.y = countrySvg.y;
   countrySelection.width = countrySvg.width;
   countrySelection.height = countrySvg.height;
+  countrySelection.name = countrySvg.name;
   countrySelection.html = countrySvg.html;
-  console.log(countrySelection.html.name)
   router.push('/country')
 }
 
