@@ -9,7 +9,7 @@ import CountryView from './components/SelectionOutput.vue';
 
 const routes = [
   { path: '/', component: MapView },
-  { path: '/country', component: CountryView},
+  { path: '/country', component: CountryView },
 ];
 
 const router = createRouter({

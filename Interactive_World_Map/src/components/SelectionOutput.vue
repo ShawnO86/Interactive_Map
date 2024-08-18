@@ -3,7 +3,7 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-    countrySvg: {
+  countrySvg: {
     type: Object,
     required: true
   }
