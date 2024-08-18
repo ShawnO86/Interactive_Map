@@ -10,7 +10,7 @@
   --color-border-highlight: rgba(0, 0, 0, 0.5);
   --color-border-selected: rgba(0, 0, 0, 1);
 
-  --color-text: rgba(60, 60, 60, 0.66);
+  --color-text: rgba(255, 255, 255, 0.66);
 }
 
 *,
@@ -53,4 +53,8 @@ path {
 path:hover {
   fill: var(--color-map-highlight);
   stroke: var(--color-border-highlight);
+}
+
+.zoomed-in>path {
+  stroke: none;
 }

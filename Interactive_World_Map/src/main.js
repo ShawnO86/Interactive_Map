@@ -5,11 +5,12 @@ import { createPinia } from 'pinia';
 import { createMemoryHistory, createRouter } from 'vue-router';
 import App from './App.vue';
 
-import CountryView from './components/SelectionOutput.vue';
+import SelectionOutput from './components/SelectionOutput.vue';
 
 
 const routes = [
-  { path: '/country/:countryName', component: CountryView },
+  { path: '/', component: App },
+  { path: '/country/:countryName', component: SelectionOutput, props: true },
 ];
 
 const router = createRouter({

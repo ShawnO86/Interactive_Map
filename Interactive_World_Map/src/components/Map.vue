@@ -4,6 +4,8 @@ import MapImage from '../assets/map-image.svg?raw';
 
 const tooltip_text = ref('');
 const country_svg = ref('');
+const country_name = ref('');
+const emit = defineEmits(['countryName', 'countryId'])
 
 const tooltip_pos = reactive({
     top: 0,
@@ -26,8 +28,11 @@ function handleSvgClick(event) {
     const element = event.target;
     if (element.tagName == 'path') {
         const bBox = element.getBBox();
+        country_name.value = element.getAttribute('name')
         // Set zoomed SVG content and adjust viewBox
         country_svg.value = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${bBox.x} ${bBox.y} ${bBox.width} ${bBox.height}" class='zoomed-in'>${element.outerHTML}</svg>`;
+        emit('countryName', country_name.value)
+        emit('countryId', element.id)
     }
 };
 
@@ -43,8 +48,11 @@ function backout() {
 <template>
     <div class="map-container" @click="handleSvgClick" @mousemove="displayTip">
         <div class="country-svg-wrapper" v-if="country_svg">
-            <button @click="backout">Back to map</button>
-            <div class="zoomed-svg" v-html="country_svg"></div>
+            <div class="countryHeading">
+                <h1>{{ country_name }}</h1>
+                <button @click="backout">World Map</button>
+            </div>
+            <div class="svg-image" v-html="country_svg"></div>
         </div>
         <div class="map-svg-wrapper" v-else>
             <div class="svg-image" v-html="MapImage"></div>
@@ -67,15 +75,18 @@ function backout() {
 }
 
 .country-svg-wrapper {
+    display: flex;
+    flex-direction: column;
     height: 95%;
     padding: 1.5rem;
 }
 
-.svg-image {
-    height: 100%;
-    position: relative;
+.countryHeading {
+    display: flex;
+    justify-content: space-around;
 }
-.zoomed-svg {
+
+.svg-image {
     height: 100%;
     position: relative;
 }
