@@ -23,6 +23,7 @@ function getSvg(countrySvg) {
   countrySelection.width = countrySvg.width;
   countrySelection.height = countrySvg.height;
   countrySelection.html = countrySvg.html;
+  console.log(countrySelection.html.name)
   router.push('/country')
 }
 

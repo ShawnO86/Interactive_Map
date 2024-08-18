@@ -40,7 +40,7 @@ function handleSvgClick(event) {
             height: bBox.height,
             html: element.outerHTML
         };
-        
+
         emit('countrySvg', svgData)
     }
 };
@@ -48,9 +48,7 @@ function handleSvgClick(event) {
 </script>
 
 <template>
-    <div class="map-container" @click="handleSvgClick" @mousemove="displayTip">
-        <div class="svg-image" v-html="MapImage"></div>
-    </div>
+    <div class="map-image" @click="handleSvgClick" @mousemove="displayTip" v-html="MapImage"></div>
 
     <div class="tooltip" v-if="tooltip_text" :style="{ top: tooltip_pos.top + 'px', left: tooltip_pos.left + 'px' }">
         {{ tooltip_text }}
@@ -58,13 +56,9 @@ function handleSvgClick(event) {
 </template>
 
 <style scoped>
-.map-container {
+.map-image {
     height: 100%;
     width: 100%;
-}
-
-.svg-image {
-    height: 100%;
     position: relative;
 }
 

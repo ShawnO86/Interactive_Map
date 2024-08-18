@@ -18,7 +18,7 @@ const svgViewBox = computed(() => {
 
 <template>
   <div class="zoomed-svg">
-    <svg xmlns="http://www.w3.org/2000/svg" :viewBox="svgViewBox" class="zoomed-in" v-html="props.countrySvg.html">
+    <svg xmlns="http://www.w3.org/2000/svg" :viewBox="svgViewBox" class="zoomed-in" v-html="countrySvg.html">
     </svg>
   </div>
 </template>
