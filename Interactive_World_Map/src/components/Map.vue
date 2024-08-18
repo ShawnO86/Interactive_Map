@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import MapImage from '../assets/map-image.svg?raw';
 
 const tooltip_text = ref('');
@@ -42,19 +42,24 @@ function backout() {
     country_svg.value = '';
 };
 
+watch(country_svg, () => {
+    if (country_svg) {
+        tooltip_text.value = '';
+    }
+});
 
 </script>
 
 <template>
-    <div class="map-container" @click="handleSvgClick" @mousemove="displayTip">
-        <div class="country-svg-wrapper" v-if="country_svg">
-            <div class="countryHeading">
+    <div class="map-container" >
+        <div class="country-svg-wrapper" v-if="country_svg" >
+            <div class="country-heading">
                 <h1>{{ country_name }}</h1>
                 <button @click="backout">World Map</button>
             </div>
             <div class="svg-image" v-html="country_svg"></div>
         </div>
-        <div class="map-svg-wrapper" v-else>
+        <div class="map-svg-wrapper" v-else @click="handleSvgClick" @mousemove="displayTip">
             <div class="svg-image" v-html="MapImage"></div>
         </div>
     </div>
@@ -78,17 +83,22 @@ function backout() {
     display: flex;
     flex-direction: column;
     height: 95%;
-    padding: 1.5rem;
 }
 
-.countryHeading {
+.country-heading {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    background-color: var(--color-border-highlight);
+    padding: 1rem;
 }
 
 .svg-image {
     height: 100%;
     position: relative;
+}
+
+button {
+    cursor: pointer;
 }
 
 .tooltip {

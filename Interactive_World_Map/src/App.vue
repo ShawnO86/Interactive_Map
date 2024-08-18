@@ -1,10 +1,13 @@
 <script setup>
 import MapView from './components/Map.vue';
 import { useRouter, useRoute, RouterLink, RouterView } from 'vue-router';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const router = useRouter();
 const route = useRoute();
+
+const countryName = ref('');
+const countryId = ref('');
 
 
 const isSelectionOutput = computed(() => {
@@ -12,11 +15,14 @@ const isSelectionOutput = computed(() => {
 });
 
 function onCountryName(data) {
-  console.log("name: ", data)
-}
+  countryName.value = data;
+  console.log("name: ", data);
+};
+
 function onCountryId(data) {
-  console.log("id: ", data)
-}
+  countryId.value = data;
+  console.log("id: ", data);
+};
 
 </script>
 
