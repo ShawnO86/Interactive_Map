@@ -1,6 +1,5 @@
-<!-- SelectionOutput.vue -->
 <script setup>
-
+//prop sent through route url (/country/countryId)
 const props = defineProps({
   countryId: {
     type: String,

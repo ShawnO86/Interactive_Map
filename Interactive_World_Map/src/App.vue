@@ -5,13 +5,17 @@ import { useRouter, useRoute } from 'vue-router';
 const router = useRouter();
 const route = useRoute();
 
+//Determines if current route is on SelectionOutput.vue or Map.vue
 const isCountryView = computed(() => {
    if (route.params.countryId) {
+    //if countryId in route - RouterView display SelectionOutput.vue
     return true
    }
+   //RouterView display Map.vue
    return false
 });
 
+//Gets emit from Map.vue to send to SelectionOutput.vue dynamically
 function goToCountryPage(id) {
   router.push(`/country/${id}`)
 };
