@@ -17,6 +17,7 @@ const svgViewBox = computed(() => {
 </script>
 
 <template>
+<<<<<<< HEAD
   <div class="zoomed-svg">
     <svg xmlns="http://www.w3.org/2000/svg" :viewBox="svgViewBox" class="zoomed-in" v-html="countrySvg.html">
     </svg>
@@ -31,3 +32,12 @@ const svgViewBox = computed(() => {
 }
 </style>
 
+=======
+  <div>
+    <p>hello, country</p>
+  </div>
+
+</template>
+
+<style scoped></style>
+>>>>>>> ZoomAndPanTest

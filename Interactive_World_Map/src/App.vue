@@ -1,4 +1,5 @@
 <script setup>
+<<<<<<< HEAD
 import MapImage from './assets/map-image.svg?raw';
 import { computed, reactive } from 'vue';
 import { useRouter } from 'vue-router';
@@ -36,11 +37,37 @@ function backout() {
   countrySelection.width = 0;
   countrySelection.height = 0;
   countrySelection.html = "";
+=======
+import MapView from './components/Map.vue';
+import { useRouter, useRoute, RouterLink, RouterView } from 'vue-router';
+import { computed, ref } from 'vue';
+
+const router = useRouter();
+const route = useRoute();
+
+const countryName = ref('');
+const countryId = ref('');
+
+
+const isSelectionOutput = computed(() => {
+  return route.params.countryName !== undefined;
+});
+
+function onCountryName(data) {
+  countryName.value = data;
+  console.log("name: ", data);
+};
+
+function onCountryId(data) {
+  countryId.value = data;
+  console.log("id: ", data);
+>>>>>>> ZoomAndPanTest
 };
 
 </script>
 
 <template>
+<<<<<<< HEAD
 
   <section class="cur-page">
     <div>route: {{ routeRead }}
@@ -55,10 +82,27 @@ function backout() {
 
 <style scoped>
 .cur-page {
+=======
+  <section class="map">
+    <MapView @countryName='onCountryName' @countryId='onCountryId'></MapView>
+  </section>
+  <section class="output" v-if="isSelectionOutput">
+    <RouterView />
+  </section>
+</template>
+
+<style scoped>
+.map {
+>>>>>>> ZoomAndPanTest
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+<<<<<<< HEAD
   flex-direction: column;
 }
 </style>
+=======
+}
+</style>
+>>>>>>> ZoomAndPanTest
