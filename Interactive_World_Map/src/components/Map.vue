@@ -15,7 +15,7 @@ function displayTip(event) {
     const element = event.target;
     if (element.tagName == 'path') {
         tooltip.text = element.getAttribute('name');
-        tooltip.top = event.clientY - 24;
+        tooltip.top = event.clientY - 50;
         tooltip.left = event.clientX;
     } else {
         tooltip.text = '';
@@ -46,9 +46,10 @@ function handleSvgClick(event) {
     position: absolute;
     z-index: 5;
     pointer-events: none;
-    background-color: var(--color-background);
+    background-color: var(--color-tooltip-bg);
     color: var(--color-map-selected);
-    padding: 0.25rem;
-    font-weight: 700;
+    padding: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 500;
 }
 </style>

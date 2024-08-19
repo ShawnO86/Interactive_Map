@@ -1,16 +1,15 @@
 /* color variables for this project */
 :root {
-  --color-background: rgb(18, 33, 68);
+  --color-background: rgb(20, 36, 74);
+  --color-tooltip-bg: rgba(0, 0, 0, 0.66);
 
-  --color-map: rgba(151, 151, 151);
-  --color-map-highlight: rgb(130, 130, 130);
-  --color-map-selected: rgb(185, 185, 185);
+  --color-map: rgba(150, 150, 150);
+  --color-map-highlight: rgb(125, 125, 125);
 
-  --color-border: rgba(0, 0, 0, 0.25);
-  --color-border-highlight: rgba(0, 0, 0, 0.5);
-  --color-border-selected: rgba(0, 0, 0, 1);
+  --color-border: rgba(0, 0, 0, 0.33);
+  --color-border-highlight: rgba(0, 0, 0, 0.66);
 
-  --color-text: rgba(255, 255, 255, 0.66);
+  --color-text: rgb(255, 255, 255);
 }
 
 *,
@@ -52,24 +51,11 @@ path {
   fill: var(--color-map);
   stroke: var(--color-border);
   cursor: pointer;
-  transition: fill 0.4s ease, transform 0.3s ease, opacity 0.3s ease;
-  transform-origin: center center;
+  transition: fill 0.3s ease, stroke 0.3s ease;
 }
 
 path:hover {
   fill: var(--color-map-highlight);
   stroke: var(--color-border-highlight);
-}
-
-.zoomed-in>path {
-  stroke: none;
-}
-
-.zoomed-in>path {
-  stroke: none;
-  cursor: auto;
-}
-
-.zoomed-in>path:hover {
-  fill: var(--color-map);
+  stroke-width: 1.5;
 }
