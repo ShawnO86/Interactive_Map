@@ -42,6 +42,12 @@ svg {
   padding: 1rem;
 }
 
+.map-image {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
 path {
   fill: var(--color-map);
   stroke: var(--color-border);

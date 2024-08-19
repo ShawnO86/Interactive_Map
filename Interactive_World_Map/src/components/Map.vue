@@ -42,12 +42,6 @@ function handleSvgClick(event) {
 </template>
 
 <style scoped>
-.map-image {
-    height: 100%;
-    width: 100%;
-    position: relative;
-}
-
 .tooltip {
     position: absolute;
     z-index: 5;

@@ -11,16 +11,11 @@ const props = defineProps({
 
 <template>
   <RouterLink to="/">Back To Map</RouterLink>
-  <div class="zoomed-svg">
+  <div class="map-image">
     {{ $route.params.countryId }}
   </div>
 </template>
 
 <style scoped>
-.zoomed-svg {
-  height: 100%;
-  width: 100%;
-  position: relative;
-}
 </style>
 
