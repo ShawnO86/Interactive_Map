@@ -55,14 +55,10 @@ path:hover {
   stroke: var(--color-border-highlight);
 }
 
-<<<<<<< HEAD
-.zoomed-in > path {
+.zoomed-in>path {
   stroke: none;
 }
 
-
-
-=======
 .zoomed-in>path {
   stroke: none;
   cursor: auto;
@@ -71,4 +67,3 @@ path:hover {
 .zoomed-in>path:hover {
   fill: var(--color-map);
 }
->>>>>>> ZoomAndPanTest
