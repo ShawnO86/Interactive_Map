@@ -1,26 +1,18 @@
 <!-- SelectionOutput.vue -->
 <script setup>
-import { computed } from 'vue';
 
 const props = defineProps({
-  countrySvg: {
-    type: Object,
+  countryId: {
+    type: String,
     required: true
   }
-});
-
-const svgViewBox = computed(() => {
-  const { x, y, width, height } = props.countrySvg;
-  return `${x} ${y} ${width} ${height}`;
 });
 
 </script>
 
 <template>
-<<<<<<< HEAD
   <div class="zoomed-svg">
-    <svg xmlns="http://www.w3.org/2000/svg" :viewBox="svgViewBox" class="zoomed-in" v-html="countrySvg.html">
-    </svg>
+
   </div>
 </template>
 
@@ -32,12 +24,3 @@ const svgViewBox = computed(() => {
 }
 </style>
 
-=======
-  <div>
-    <p>hello, country</p>
-  </div>
-
-</template>
-
-<style scoped></style>
->>>>>>> ZoomAndPanTest
