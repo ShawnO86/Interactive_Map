@@ -1,10 +1,11 @@
 <script setup>
-import { ref, reactive, watch } from 'vue';
+import { ref, reactive, watch, onMounted } from 'vue';
 import MapImage from '../assets/map-image.svg?raw';
 
 const tooltip_text = ref('');
 const country_svg = ref('');
 const country_name = ref('');
+const svg = ref('')
 const emit = defineEmits(['countryName', 'countryId'])
 
 
@@ -50,7 +51,8 @@ function zoom(event){
     const element = event.target;
     if (element.tagName == 'path') {
         const parent = element.parentElement;
-        console.log(event)
+        svg.value = parent
+        //console.log(event)
         let [x, y, width, height] = parent.getAttribute('viewBox').split(' ');
         x = parseInt(x);
         y = parseInt(y);
@@ -64,7 +66,7 @@ function zoom(event){
             height += 50
         }
 
-        console.log(x, y, width, height);
+        //console.log(x, y, width, height);
         parent.setAttribute('viewBox', `${x} ${y} ${width} ${height}`) 
     }
 
@@ -75,6 +77,20 @@ watch(country_svg, () => {
         tooltip_text.value = '';
     }
 });
+
+watch(svg, () => {
+    if (svg) {
+        const paths = svg.value.childNodes;
+        let elBbox;
+        paths.forEach(element => {
+            if (element.tagName == 'path') {
+                elBbox = element.getBBox();
+                console.log(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${Math.ceil(elBbox.x)} ${Math.ceil(elBbox.y)} ${Math.ceil(elBbox.width)} ${Math.ceil(elBbox.height)}">${element.outerHTML}</svg>`);
+            }
+        });
+    }
+})
+
 
 </script>
 
