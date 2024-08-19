@@ -7,6 +7,7 @@ const country_svg = ref('');
 const country_name = ref('');
 const emit = defineEmits(['countryName', 'countryId'])
 
+
 const tooltip_pos = reactive({
     top: 0,
     left: 0
@@ -42,6 +43,33 @@ function backout() {
     country_svg.value = '';
 };
 
+
+//figure out how to zoom while still being able to pan the svg around...
+//what would SVG x and y be relative to client X and Y?
+function zoom(event){
+    const element = event.target;
+    if (element.tagName == 'path') {
+        const parent = element.parentElement;
+        console.log(event)
+        let [x, y, width, height] = parent.getAttribute('viewBox').split(' ');
+        x = parseInt(x);
+        y = parseInt(y);
+        width = parseInt(width);
+        height = parseInt(height);
+        if (event.deltaY < 0) {
+            width -= 50
+            height -= 50
+        } else {
+            width += 50
+            height += 50
+        }
+
+        console.log(x, y, width, height);
+        parent.setAttribute('viewBox', `${x} ${y} ${width} ${height}`) 
+    }
+
+}
+
 watch(country_svg, () => {
     if (country_svg) {
         tooltip_text.value = '';
@@ -60,7 +88,7 @@ watch(country_svg, () => {
             <div class="svg-image" v-html="country_svg"></div>
         </div>
         <div class="map-svg-wrapper" v-else @click="handleSvgClick" @mousemove="displayTip">
-            <div class="svg-image" v-html="MapImage"></div>
+            <div class="svg-image" v-html="MapImage" @wheel="zoom"></div>
         </div>
     </div>
 
