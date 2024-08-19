@@ -11,8 +11,9 @@ const props = defineProps({
 </script>
 
 <template>
+  <RouterLink to="/">Back To Map</RouterLink>
   <div class="zoomed-svg">
-
+    {{ $route.params.countryId }}
   </div>
 </template>
 

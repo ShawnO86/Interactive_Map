@@ -1,12 +1,6 @@
 <script setup>
+import MapImage from '../assets/map-image.svg?raw';
 import { ref, reactive } from 'vue';
-
-const props = defineProps({
-    MapImage: {
-        type: String,
-        required: true
-    }
-});
 
 const emit = defineEmits(['countrySvgId']);
 
