@@ -34,9 +34,11 @@ function goToCountryPage(id) {
 <style scoped>
 .cur-page {
   height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+
 }
 </style>
