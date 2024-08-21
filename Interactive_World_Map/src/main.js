@@ -4,10 +4,10 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import { createWebHistory, createRouter } from 'vue-router';
 import App from './App.vue';
-import MapView from './components/Map.vue';
+import Search from './components/CountrySearch.vue';
 
 const routes = [
-  { path: '/', name:'Map', component: MapView },
+  { path: '/', name:'Search', component: Search },
   { path: '/country/:countryId', name:'Country', component: () => import('./components/SelectionOutput.vue'), props: true }
 ];
 

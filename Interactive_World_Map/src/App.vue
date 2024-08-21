@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import MapView from './components/Map.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -28,22 +29,32 @@ onMounted(() => {
 </script>
 
 <template>
+  <section class="map-container">
+    <MapView @countrySvgId="goToCountryPage"></MapView>
+  </section>
+
 
   <section class="cur-page">
     <RouterView v-if="isCountryView" />
-    <RouterView v-else @countrySvgId="goToCountryPage" />
+    <RouterView v-else></RouterView>
   </section>
 
 </template>
 
 <style scoped>
-.cur-page {
+.map-container {
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
 
+.cur-page {
+  width: 25vw;
+  max-width: 30rem;
+  padding: 1rem;
+  background-color: var(--color-sidebar-bg);
 }
 </style>

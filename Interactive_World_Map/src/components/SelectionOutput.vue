@@ -12,7 +12,7 @@ const props = defineProps({
 const countrySvg = shallowRef('');
 
 async function getSvg(countryId) {
-  let svg = await import(`../assets/svgs/${countryId}.vue?component`);
+  let svg = await import(`../assets/svgs/${countryId}.svg?raw`);
   countrySvg.value = svg.default;
 }
 
@@ -23,10 +23,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <RouterLink to="/">Back To Map</RouterLink>
-  <div class="map-image">
-    <countrySvg/>
-  </div>
+  <RouterLink to="/">Back To Search</RouterLink>
+  <div class="map-image" v-if="countrySvg" v-html="countrySvg"></div>
+  <div v-else><p>Loading Country Image...</p></div>
 </template>
 
 <style scoped>

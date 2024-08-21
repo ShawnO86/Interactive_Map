@@ -2,9 +2,10 @@
 :root {
   --color-background: rgb(20, 36, 74);
   --color-tooltip-bg: rgba(0, 0, 0, 0.66);
+  --color-sidebar-bg: rgba(100, 100, 100, .66);
 
   --color-map: rgba(150, 150, 150);
-  --color-map-highlight: rgb(125, 125, 125);
+  --color-map-highlight: rgb(100, 100, 100);
 
   --color-border: rgba(0, 0, 0, 0.33);
   --color-border-highlight: rgba(0, 0, 0, 0.66);
@@ -28,11 +29,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+main {
+  display: flex;
+}
+
 #app {
   margin: 0 auto;
   padding: 0;
   font-weight: normal;
-
 }
 
 svg {

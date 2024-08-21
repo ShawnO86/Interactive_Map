@@ -1,8 +1,8 @@
 <script setup>
-import { onMounted, reactive, ref, shallowRef } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 
 const emit = defineEmits(['countrySvgId']);
-const mapImage = shallowRef('');
+const mapImage = ref('');
 
 const tooltip = reactive({
     text: '',
@@ -13,7 +13,7 @@ const tooltip = reactive({
 async function loadMap(){
     //import svg as raw string to use in v-html tag
     console.log("load map?")
-    let map = await import('../assets/map-image.vue');
+    let map = await import('../assets/svgs/map-image.svg?raw');
     mapImage.value = map.default;
 };
 
@@ -65,10 +65,8 @@ onMounted(()=>{
 
 <template>
     <!-- Handles display of Map SVG - defines click events and mousemove/hover events for tooltip reaction -->
-    <div class="map-image" @click="handleSvgClick" @mousemove="displayTip" v-if="mapImage">
-        <mapImage></mapImage>
-    </div>
-    <div v-else>Loading World Map Image...</div>
+    <div class="map-image" @click="handleSvgClick" @mousemove="displayTip" v-if="mapImage" v-html="mapImage"></div>
+    <div v-else><p>Loading World Map Image...</p></div>
 
     <div class="tooltip" v-if="tooltip.text" :style="{ top: tooltip.top + 'px', left: tooltip.left + 'px' }">
         {{ tooltip.text }}
