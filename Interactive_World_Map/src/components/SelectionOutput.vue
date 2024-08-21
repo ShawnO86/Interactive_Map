@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, shallowRef } from 'vue';
 
 //prop sent through route url (/country/countryId)
 const props = defineProps({
@@ -9,10 +9,10 @@ const props = defineProps({
   }
 });
 
-const countrySvg = ref('');
+const countrySvg = shallowRef('');
 
 async function getSvg(countryId) {
-  let svg = await import(`../assets/svg_countries/${countryId}.svg?raw`);
+  let svg = await import(`../assets/svgs/${countryId}.vue?component`);
   countrySvg.value = svg.default;
 }
 
@@ -24,7 +24,8 @@ onMounted(() => {
 
 <template>
   <RouterLink to="/">Back To Map</RouterLink>
-  <div class="map-image" v-html="countrySvg">
+  <div class="map-image">
+    <countrySvg/>
   </div>
 </template>
 

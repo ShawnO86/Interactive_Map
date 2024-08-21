@@ -7,7 +7,11 @@ import svgLoader from 'vite-svg-loader';
 export default defineConfig({
   plugins: [
     vue(),
-    svgLoader()
+    svgLoader({
+      svgoConfig: {
+        multipass: true
+      }
+    })
   ],
   resolve: {
     alias: {

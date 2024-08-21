@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
@@ -19,6 +19,10 @@ const isCountryView = computed(() => {
 function goToCountryPage(id) {
   router.push(`/country/${id}`);
 };
+
+onMounted(() => {
+  console.log("hello????")
+})
 
 </script>
 
