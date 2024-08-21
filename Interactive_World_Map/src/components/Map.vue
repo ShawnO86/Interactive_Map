@@ -13,7 +13,7 @@ const tooltip = reactive({
 async function loadMap(){
     //import svg as raw string to use in v-html tag
     console.log("load map?")
-    let map = await import('../assets/svgs/map-image.vue');
+    let map = await import('../assets/map-image.vue');
     mapImage.value = map.default;
 };
 

@@ -21,6 +21,7 @@ function goToCountryPage(id) {
 };
 
 onMounted(() => {
+  console.log(isCountryView)
   console.log("hello????")
 })
 

@@ -7,8 +7,8 @@ import App from './App.vue';
 import MapView from './components/Map.vue';
 
 const routes = [
-  { path: '/', component: MapView },
-  { path: '/country/:countryId', component: () => import('./components/SelectionOutput.vue'), props: true }
+  { path: '/', name:'Map', component: MapView },
+  { path: '/country/:countryId', name:'Country', component: () => import('./components/SelectionOutput.vue'), props: true }
 ];
 
 const router = createRouter({
