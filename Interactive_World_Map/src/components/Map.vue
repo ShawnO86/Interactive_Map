@@ -86,7 +86,7 @@ function handleSvgClick(event) {
         }
         if (newVb.width < defaultViewBox.width) {
             const vbString = `${newVb.x} ${newVb.y} ${newVb.width} ${newVb.height}`
-            let tween = gsap.to('.worldMap', {duration: 0.7, attr: {viewBox: vbString}, ease: "power1.in"});
+            let tween = gsap.to('.world-map', {duration: 0.7, attr: {viewBox: vbString}, ease: "power1.in"});
             tween.play();
             zoomed = true;
         } 
@@ -96,7 +96,7 @@ function handleSvgClick(event) {
 
 function zoomOut() {
     const vbString = `${defaultViewBox.x} ${defaultViewBox.y} ${defaultViewBox.width} ${defaultViewBox.height}`
-    let tween = gsap.to('.worldMap', {duration: 0.7, attr: {viewBox: vbString}, ease: "power1.in"});
+    let tween = gsap.to('.world-map', {duration: 0.7, attr: {viewBox: vbString}, ease: "power1.in"});
     tween.play();
     zoomed = false;
 }
