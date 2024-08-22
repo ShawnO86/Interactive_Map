@@ -29,9 +29,10 @@ const isCountryView = computed(() => {
   return false;
 });
 
-
 //TODO figure out how to update, maybe just in onMounted check route?
 //Color selected country 
+    //Get search from countrysearch.vue using pinia???? 
+    //Using search data, zoom to the country location???
 watch(isCountryView, () => {
     zoomedCountry.value = route.params.countryId
     console.log('zoomed:',zoomedCountry)

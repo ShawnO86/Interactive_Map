@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, reactive } from 'vue';
 
 //prop sent through route url (/country/countryId)
 const props = defineProps({
@@ -8,21 +8,26 @@ const props = defineProps({
     required: true
   }
 });
+const countryData = reactive({
 
-async function getSvg(countryId) {
-  let svg = await import(`../assets/svgs/${countryId}.svg?raw`);
-  countrySvg.value = svg.default;
+})
+    //Get search from countrySearch.vue using pinia???? 
+    //Using search data, call API for country data???
+async function getData(id) {
+
 }
 
 /* onMounted(() => {
-  getSvg(props.countryId);
+  getData(props.countryId);
 }) */
 
 </script>
 
 <template>
   <RouterLink to="/">Back To Search</RouterLink>
-  <!-- <div class="map-image" v-if="countrySvg" v-html="countrySvg"></div> -->
+  <div class="country-data-container" v-if="countryData.name">
+
+  </div>
   <div ><p>Loading Country Data...</p></div>
 </template>
 
