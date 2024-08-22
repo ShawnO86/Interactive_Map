@@ -76,17 +76,24 @@ function displayTip(event) {
 //emit the countrySvgId to App.vue to use with router to send to SelectionOutput.vue (/country/id)
 function handleSvgClick(event) {
     const element = event.target;
-    console.log(element)
+    //console.log(element)
     if (element.tagName == 'path') {
         const elId = element.getAttribute('id');
         const newVb = element.getBBox();
-        if (newVb.width < 200) {
-            newVb.width += 64
-            newVb.x -= 32
-        }
+        const parent = element.parentElement;
+        parent.childNodes.forEach(node => {
+            node.classList.remove('selected')
+        });
+        element.classList.add('selected')
+        console.log("before:", newVb.width)
+         if (newVb.width < 500) {
+            newVb.width += 80
+            newVb.x -= 40
+        } 
+        console.log("after:", newVb.width)
         if (newVb.width < defaultViewBox.width) {
             const vbString = `${newVb.x} ${newVb.y} ${newVb.width} ${newVb.height}`
-            let tween = gsap.to('.world-map', {duration: 0.7, attr: {viewBox: vbString}, ease: "power1.in"});
+            let tween = gsap.to('.world-map', {duration: 1, attr: {viewBox: vbString}, ease: "power1.in"});
             tween.play();
             zoomed = true;
         } 
@@ -96,7 +103,7 @@ function handleSvgClick(event) {
 
 function zoomOut() {
     const vbString = `${defaultViewBox.x} ${defaultViewBox.y} ${defaultViewBox.width} ${defaultViewBox.height}`
-    let tween = gsap.to('.world-map', {duration: 0.7, attr: {viewBox: vbString}, ease: "power1.in"});
+    let tween = gsap.to('.world-map', {duration: 1, attr: {viewBox: vbString}, ease: "power1.in"});
     tween.play();
     zoomed = false;
 }
@@ -142,4 +149,5 @@ button {
     padding: 0.5rem;
     font-size: 1rem;
 }
+
 </style>
