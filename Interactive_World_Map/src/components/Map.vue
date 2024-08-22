@@ -1,5 +1,6 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, computed, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { gsap } from 'gsap/gsap-core';
 
 const emit = defineEmits(['countrySvgId', 'zoomedOut']);
@@ -14,8 +15,29 @@ const tooltip = reactive({
     top: 0,
     left: 0
 });
+const route = useRoute();
 const mapImage = ref('');
+const zoomedCountry = ref('');
 let zoomed = false;
+
+const isCountryView = computed(() => {
+  if (route.params.countryId) {
+    //if countryId in route - RouterView display SelectionOutput.vue
+    return true;
+  }
+  //RouterView display Map.vue
+  return false;
+});
+
+
+
+//TODO figure out how to update, maybe just in onMounted check route?
+//Color selected country 
+watch(isCountryView, () => {
+    console.log('country')
+    zoomedCountry.value = route.params.countryId
+    console.log('zoomed:',zoomedCountry)
+})
 
 async function loadMap(){
     //import svg as raw string to use in v-html tag
@@ -55,7 +77,6 @@ function displayTip(event) {
     }
 };
 
-
 //emit the countrySvgId to App.vue to use with router to send to SelectionOutput.vue (/country/id)
 function handleSvgClick(event) {
     const element = event.target;
@@ -70,7 +91,7 @@ function handleSvgClick(event) {
         }
         if (newVb.width < defaultViewBox.width) {
             const vbString = `${newVb.x} ${newVb.y} ${newVb.width} ${newVb.height}`
-            let tween = gsap.to('.worldMap', {duration: 0.7, attr: {viewBox: vbString}, ease: "power1.in", smoothOrigin:true});
+            let tween = gsap.to('.worldMap', {duration: 0.7, attr: {viewBox: vbString}, ease: "power1.in"});
             tween.play();
             zoomed = true;
         } 
@@ -83,7 +104,6 @@ function zoomOut() {
     let tween = gsap.to('.worldMap', {duration: 0.7, attr: {viewBox: vbString}, ease: "power1.in", smoothOrigin:true});
     tween.play();
     zoomed = false;
-    emit('zoomedOut');
 }
 
 onMounted(()=>{

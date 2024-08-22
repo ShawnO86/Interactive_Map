@@ -5,7 +5,6 @@ import MapView from './components/Map.vue';
 
 const router = useRouter();
 const route = useRoute();
-
 //Determines if current route is on SelectionOutput.vue or Map.vue
 const isCountryView = computed(() => {
   if (route.params.countryId) {
@@ -21,12 +20,7 @@ function goToCountryPage(id) {
   router.push(`/country/${id}`);
 };
 
-function removeCountry() {
-  router.push(`/`);
-}
-
 onMounted(() => {
-  console.log(isCountryView)
   console.log("hello????")
 })
 
@@ -34,7 +28,7 @@ onMounted(() => {
 
 <template>
   <section class="map-container">
-    <MapView @countrySvgId="goToCountryPage" @zoomedOut="removeCountry"></MapView>
+    <MapView @countrySvgId="goToCountryPage"></MapView>
   </section>
 
 

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, shallowRef } from 'vue';
+import { onMounted } from 'vue';
 
 //prop sent through route url (/country/countryId)
 const props = defineProps({
@@ -9,23 +9,21 @@ const props = defineProps({
   }
 });
 
-const countrySvg = shallowRef('');
-
 async function getSvg(countryId) {
   let svg = await import(`../assets/svgs/${countryId}.svg?raw`);
   countrySvg.value = svg.default;
 }
 
-onMounted(() => {
+/* onMounted(() => {
   getSvg(props.countryId);
-})
+}) */
 
 </script>
 
 <template>
   <RouterLink to="/">Back To Search</RouterLink>
-  <div class="map-image" v-if="countrySvg" v-html="countrySvg"></div>
-  <div v-else><p>Loading Country Data...</p></div>
+  <!-- <div class="map-image" v-if="countrySvg" v-html="countrySvg"></div> -->
+  <div ><p>Loading Country Data...</p></div>
 </template>
 
 <style scoped>
