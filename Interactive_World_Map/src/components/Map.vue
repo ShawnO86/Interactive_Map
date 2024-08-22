@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref, computed, watch } from 'vue';
+import { onMounted, reactive, ref, computed, watch, shallowRef } from 'vue';
 import { useRoute } from 'vue-router';
 import { gsap } from 'gsap/gsap-core';
 
@@ -16,7 +16,7 @@ const tooltip = reactive({
     left: 0
 });
 const route = useRoute();
-const mapImage = ref('');
+const mapImage = shallowRef('');
 const zoomedCountry = ref('');
 let zoomed = false;
 
@@ -30,19 +30,16 @@ const isCountryView = computed(() => {
 });
 
 
-
 //TODO figure out how to update, maybe just in onMounted check route?
 //Color selected country 
 watch(isCountryView, () => {
-    console.log('country')
     zoomedCountry.value = route.params.countryId
     console.log('zoomed:',zoomedCountry)
 })
 
 async function loadMap(){
     //import svg as raw string to use in v-html tag
-    console.log("load map?")
-    let map = await import('../assets/svgs/map-image.svg?raw');
+    let map = await import('../assets/svgs/map-image.svg?component');
     mapImage.value = map.default;
 };
 
@@ -54,10 +51,8 @@ function displayTip(event) {
             y: event.clientY,
             x: event.clientX
         }
-
     const ttDiv = document.querySelector('.tooltip');
     let ttWidth = 0;
-
     if (element.tagName == 'path') {
         tooltip.text = element.getAttribute('name');
         let top = cursorPos.y - 50;
@@ -84,7 +79,6 @@ function handleSvgClick(event) {
     if (element.tagName == 'path') {
         const elId = element.getAttribute('id');
         const newVb = element.getBBox();
-        console.log(newVb)
         if (newVb.width < 200) {
             newVb.width += 64
             newVb.x -= 32
@@ -101,7 +95,7 @@ function handleSvgClick(event) {
 
 function zoomOut() {
     const vbString = `${defaultViewBox.x} ${defaultViewBox.y} ${defaultViewBox.width} ${defaultViewBox.height}`
-    let tween = gsap.to('.worldMap', {duration: 0.7, attr: {viewBox: vbString}, ease: "power1.in", smoothOrigin:true});
+    let tween = gsap.to('.worldMap', {duration: 0.7, attr: {viewBox: vbString}, ease: "power1.in"});
     tween.play();
     zoomed = false;
 }
@@ -115,7 +109,7 @@ onMounted(()=>{
 <template>
     <!-- Handles display of Map SVG - defines click events and mousemove/hover events for tooltip reaction -->
     <button v-if="zoomed" @click="zoomOut">Zoom Out</button>
-    <div class="map-image" @click="handleSvgClick" @mousemove="displayTip" v-if="mapImage" v-html="mapImage"></div>
+    <div class="map-image" @click="handleSvgClick" @mousemove="displayTip" v-if="mapImage"><mapImage></mapImage></div>
     <div v-else><p>Loading World Map Image...</p></div>
 
     <div class="tooltip" v-if="tooltip.text" :style="{ top: tooltip.top + 'px', left: tooltip.left + 'px' }">

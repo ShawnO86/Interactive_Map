@@ -10,7 +10,8 @@ export default defineConfig({
     vue(),
     svgLoader({
       svgoConfig: {
-        multipass: true
+        multipass: true,
+        plugins: ["convertPathData"]
       }
     })
   ],

@@ -31,10 +31,9 @@ onMounted(() => {
     <MapView @countrySvgId="goToCountryPage"></MapView>
   </section>
 
-
   <section class="cur-page">
-    <RouterView v-if="isCountryView" />
-    <RouterView v-else></RouterView>
+<!--     <RouterView v-if="isCountryView" /> -->
+    <RouterView></RouterView>
   </section>
 
 </template>
