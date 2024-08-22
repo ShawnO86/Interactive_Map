@@ -1,14 +1,21 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
+import { gsap } from 'gsap/gsap-core';
 
-const emit = defineEmits(['countrySvgId']);
-const mapImage = ref('');
-
+const emit = defineEmits(['countrySvgId', 'zoomedOut']);
+const defaultViewBox = {
+    x: 0,
+    y: 0,
+    width: 1010,
+    height: 665
+};
 const tooltip = reactive({
     text: '',
     top: 0,
     left: 0
 });
+const mapImage = ref('');
+let zoomed = false;
 
 async function loadMap(){
     //import svg as raw string to use in v-html tag
@@ -52,10 +59,32 @@ function displayTip(event) {
 //emit the countrySvgId to App.vue to use with router to send to SelectionOutput.vue (/country/id)
 function handleSvgClick(event) {
     const element = event.target;
+    console.log(element)
     if (element.tagName == 'path') {
-        emit('countrySvgId', element.getAttribute('id'));
+        const elId = element.getAttribute('id');
+        const newVb = element.getBBox();
+        console.log(newVb)
+        if (newVb.width < 200) {
+            newVb.width += 64
+            newVb.x -= 32
+        }
+        if (newVb.width < defaultViewBox.width) {
+            const vbString = `${newVb.x} ${newVb.y} ${newVb.width} ${newVb.height}`
+            let tween = gsap.to('.worldMap', {duration: 0.7, attr: {viewBox: vbString}, ease: "power1.in", smoothOrigin:true});
+            tween.play();
+            zoomed = true;
+        } 
+        emit('countrySvgId', elId);
     }
 };
+
+function zoomOut() {
+    const vbString = `${defaultViewBox.x} ${defaultViewBox.y} ${defaultViewBox.width} ${defaultViewBox.height}`
+    let tween = gsap.to('.worldMap', {duration: 0.7, attr: {viewBox: vbString}, ease: "power1.in", smoothOrigin:true});
+    tween.play();
+    zoomed = false;
+    emit('zoomedOut');
+}
 
 onMounted(()=>{
     loadMap();
@@ -65,6 +94,7 @@ onMounted(()=>{
 
 <template>
     <!-- Handles display of Map SVG - defines click events and mousemove/hover events for tooltip reaction -->
+    <button v-if="zoomed" @click="zoomOut">Zoom Out</button>
     <div class="map-image" @click="handleSvgClick" @mousemove="displayTip" v-if="mapImage" v-html="mapImage"></div>
     <div v-else><p>Loading World Map Image...</p></div>
 
@@ -79,10 +109,22 @@ onMounted(()=>{
     z-index: 5;
     pointer-events: none;
     background-color: var(--color-tooltip-bg);
-    color: var(--color-map-selected);
+    color: var(--color-text);
     padding: 0.5rem;
     font-size: 1.25rem;
     font-weight: 500;
     white-space: nowrap;
+}
+button {
+    position: absolute;
+    z-index: 5;
+    cursor: pointer;
+    top: 1rem;
+    left: 1rem;
+    border: none;
+    background-color: var(--color-tooltip-bg);
+    color: var(--color-text);
+    padding: 0.5rem;
+    font-size: 1rem;
 }
 </style>

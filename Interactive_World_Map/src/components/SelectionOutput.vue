@@ -25,7 +25,7 @@ onMounted(() => {
 <template>
   <RouterLink to="/">Back To Search</RouterLink>
   <div class="map-image" v-if="countrySvg" v-html="countrySvg"></div>
-  <div v-else><p>Loading Country Image...</p></div>
+  <div v-else><p>Loading Country Data...</p></div>
 </template>
 
 <style scoped>

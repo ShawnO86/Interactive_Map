@@ -21,6 +21,10 @@ function goToCountryPage(id) {
   router.push(`/country/${id}`);
 };
 
+function removeCountry() {
+  router.push(`/`);
+}
+
 onMounted(() => {
   console.log(isCountryView)
   console.log("hello????")
@@ -30,7 +34,7 @@ onMounted(() => {
 
 <template>
   <section class="map-container">
-    <MapView @countrySvgId="goToCountryPage"></MapView>
+    <MapView @countrySvgId="goToCountryPage" @zoomedOut="removeCountry"></MapView>
   </section>
 
 
