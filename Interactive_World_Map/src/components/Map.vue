@@ -1,7 +1,7 @@
 <script setup>
-import { onMounted, reactive, ref, computed, watch, shallowRef } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, reactive, ref, shallowRef } from 'vue';
 import { gsap } from 'gsap/gsap-core';
+
 
 const emit = defineEmits(['countrySvgId', 'zoomedOut']);
 const defaultViewBox = {
@@ -15,30 +15,12 @@ const tooltip = reactive({
     top: 0,
     left: 0
 });
-const route = useRoute();
 const mapImage = shallowRef('');
-const zoomedCountry = ref('');
-let zoomed = false;
 
-const isCountryView = computed(() => {
-  if (route.params.countryId) {
-    //if countryId in route - RouterView display SelectionOutput.vue
-    return true;
-  }
-  //RouterView display Map.vue
-  return false;
-});
+let zoomed = ref(false);
+let mapElement = ref('');
 
-//TODO figure out how to update, maybe just in onMounted check route?
-//Color selected country 
-    //Get search from countrysearch.vue using pinia???? 
-    //Using search data, zoom to the country location???
-watch(isCountryView, () => {
-    zoomedCountry.value = route.params.countryId
-    console.log('zoomed:',zoomedCountry)
-})
-
-async function loadMap(){
+async function loadMap() {
     //import svg as raw string to use in v-html tag
     let map = await import('../assets/svgs/map-image.svg?component');
     mapImage.value = map.default;
@@ -49,9 +31,9 @@ function displayTip(event) {
     const element = event.target;
     const winWidth = window.innerWidth;
     const cursorPos = {
-            y: event.clientY,
-            x: event.clientX
-        }
+        y: event.clientY,
+        x: event.clientX
+    }
     const ttDiv = document.querySelector('.tooltip');
     let ttWidth = 0;
     if (element.tagName == 'path') {
@@ -80,35 +62,49 @@ function handleSvgClick(event) {
     if (element.tagName == 'path') {
         const elId = element.getAttribute('id');
         const newVb = element.getBBox();
-        const parent = element.parentElement;
-        parent.childNodes.forEach(node => {
-            node.classList.remove('selected')
-        });
+        removeSelection(element)
         element.classList.add('selected')
         console.log("before:", newVb.width)
-         if (newVb.width < 500) {
+        if (newVb.width < 500) {
             newVb.width += 80
             newVb.x -= 40
-        } 
+        }
         console.log("after:", newVb.width)
         if (newVb.width < defaultViewBox.width) {
             const vbString = `${newVb.x} ${newVb.y} ${newVb.width} ${newVb.height}`
-            let tween = gsap.to('.world-map', {duration: 1, attr: {viewBox: vbString}, ease: "power1.in"});
-            tween.play();
-            zoomed = true;
-        } 
+            let moveTween = gsap.to('.world-map', { delay: 0.2, duration: 0.2, attr: { viewBox: vbString }, ease: "power1.in" });
+            moveTween.play();
+        }
+        zoomed.value = true;
         emit('countrySvgId', elId);
     }
 };
 
 function zoomOut() {
+    removeSelection()
     const vbString = `${defaultViewBox.x} ${defaultViewBox.y} ${defaultViewBox.width} ${defaultViewBox.height}`
-    let tween = gsap.to('.world-map', {duration: 1, attr: {viewBox: vbString}, ease: "power1.in"});
+    let tween = gsap.to('.world-map', { duration: 0.2, attr: { viewBox: vbString }, ease: "power1.in" });
     tween.play();
-    zoomed = false;
+    zoomed.value = false;
 }
 
-onMounted(()=>{
+function removeSelection(elem = '') {
+    const mapElement = document.querySelector('.world-map')
+    mapElement.childNodes.forEach(node => {
+        node.classList.remove('selected')
+        if (elem) {
+            if (node != elem) {
+                node.classList.add('invis')
+            }
+        } else {
+            setTimeout(() => {
+                node.classList.remove('invis')
+            }, 200)
+        }
+    });
+}
+
+onMounted(() => {
     loadMap();
 })
 
@@ -116,9 +112,14 @@ onMounted(()=>{
 
 <template>
     <!-- Handles display of Map SVG - defines click events and mousemove/hover events for tooltip reaction -->
-    <button v-if="zoomed" @click="zoomOut">Zoom Out</button>
-    <div class="map-image" @click="handleSvgClick" @mousemove="displayTip" v-if="mapImage"><mapImage></mapImage></div>
-    <div v-else><p>Loading World Map Image...</p></div>
+    <RouterLink to="/" v-if="zoomed" @click="zoomOut" class="link-btn">World Map</RouterLink>
+
+    <div class="map-image" @click="handleSvgClick" @mousemove="displayTip" v-if="mapImage">
+        <mapImage></mapImage>
+    </div>
+    <div v-else>
+        <p>Loading World Map Image...</p>
+    </div>
 
     <div class="tooltip" v-if="tooltip.text" :style="{ top: tooltip.top + 'px', left: tooltip.left + 'px' }">
         {{ tooltip.text }}
@@ -137,17 +138,11 @@ onMounted(()=>{
     font-weight: 500;
     white-space: nowrap;
 }
-button {
+
+.link-btn {
     position: absolute;
     z-index: 5;
-    cursor: pointer;
     top: 1rem;
     left: 1rem;
-    border: none;
-    background-color: var(--color-tooltip-bg);
-    color: var(--color-text);
-    padding: 0.5rem;
-    font-size: 1rem;
 }
-
 </style>

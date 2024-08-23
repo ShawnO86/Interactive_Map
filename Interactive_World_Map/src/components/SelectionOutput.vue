@@ -11,8 +11,8 @@ const props = defineProps({
 const countryData = reactive({
 
 })
-    //Get search from countrySearch.vue using pinia???? 
-    //Using search data, call API for country data???
+//Get search from countrySearch.vue using pinia???? 
+//Using search data, call API for country data???
 async function getData(id) {
 
 }
@@ -24,13 +24,13 @@ async function getData(id) {
 </script>
 
 <template>
-  <RouterLink to="/">Back To Search</RouterLink>
   <div class="country-data-container" v-if="countryData.name">
 
   </div>
-  <div ><p>Loading Country Data...</p></div>
+
+  <div>
+    <p>Loading Country Data...</p>
+  </div>
 </template>
 
-<style scoped>
-</style>
-
+<style scoped></style>
