@@ -2,7 +2,6 @@
 import { onMounted, reactive, ref, shallowRef } from 'vue';
 import { gsap } from 'gsap/gsap-core';
 
-//next add manual zoom and pan using viewBox and +- <> buttons
 
 const emit = defineEmits(['countrySvgId', 'zoomedOut']);
 const defaultViewBox = {
@@ -70,7 +69,6 @@ function updateViewBox(delayAmt) {
 
 function handleSvgClick(event) {
     const element = event.target;
-    //console.log(element)
     if (element.tagName == 'path') {
         const elId = element.getAttribute('id');
         const newVb = element.getBBox();
@@ -119,7 +117,6 @@ function toggleSelection(elem = '') {
 };
 
 function zoomMap(dir) {
-    //map control - zoom
     const zoomFactor = dir == "in" ? 0.75 : 1.25;
     const centerX = currentViewBox.x + currentViewBox.width / 2;
     const centerY = currentViewBox.y + currentViewBox.height / 2;
@@ -137,7 +134,6 @@ function zoomMap(dir) {
 };
 
 function panMap(dir) {
-    //map control - pan
     switch (dir) {
         case "up":
             currentViewBox.y -= 25
@@ -174,7 +170,7 @@ onMounted(() => {
                 <button class="map-control-btn zoom-controls" id="zoom-in" @click="zoomMap('in')">+</button>
                 <button class="map-control-btn zoom-controls" id="zoom-out" @click="zoomMap('out')">-</button>
             </div>
-            <button class="map-control-btn back-to-map" v-if="zoomed" @click="zoomOutFully">Default Map</button>
+            <button class="map-control-btn back-to-map" v-if="zoomed" @click="zoomOutFully">Reset Map</button>
         </div>
 
     </div>
