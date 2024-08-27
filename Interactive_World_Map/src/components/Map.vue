@@ -1,7 +1,6 @@
 <script setup>
-import { onMounted, reactive, ref, shallowRef } from 'vue';
+import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue';
 import { gsap } from 'gsap/gsap-core';
-
 
 //next add manual zoom and pan using viewBox and +- <> buttons
 
@@ -18,6 +17,8 @@ const tooltip = reactive({
     left: 0
 });
 const mapImage = shallowRef('');
+
+let mapElement;
 
 let zoomed = ref(false);
 
@@ -85,10 +86,10 @@ function zoomOutFully() {
     let tween = gsap.to('.world-map', { duration: 0.2, attr: { viewBox: vbString }, ease: "power1.in" });
     tween.play();
     zoomed.value = false;
-}
+};
 
 function toggleSelection(elem = '') {
-    const mapElementPaths = document.querySelector('.world-map').childNodes;
+    const mapElementPaths = mapElement.childNodes;
     mapElementPaths.forEach(node => {
         node.classList.remove('selected');
         if (elem && node != elem) {
@@ -99,7 +100,23 @@ function toggleSelection(elem = '') {
             }, 200);
         }
     });
-}
+};
+
+function zoomIn() {
+
+};
+
+function zoomOut() {
+
+};
+
+function panLeft() {
+
+};
+
+function panRight() {
+
+};
 
 onMounted(() => {
     loadMap();
