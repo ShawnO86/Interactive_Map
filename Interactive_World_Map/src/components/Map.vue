@@ -272,6 +272,4 @@ onMounted(() => {
     font-weight: 500;
     white-space: nowrap;
 }
-
-.link-btn {}
 </style>
