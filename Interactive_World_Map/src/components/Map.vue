@@ -89,7 +89,6 @@ function handleSvgClick(event) {
             updateViewBox(0.2)
         }
         zoomed.value = true;
-        countryView.value = true;
         emit('countrySvgId', elId);
     }
 };
@@ -165,16 +164,19 @@ onMounted(() => {
 <template>
     <!-- Handles display of Map SVG - defines click events and mousemove/hover events for tooltip reaction -->
     <div class="map-control-container">
-        <div class="map-controls" v-if="!countryView">
+        <div class="map-controls">
             <p id="map-controls-head">Map Controls</p>
-            <button class="map-control" id="pan-up" @click="panMap('up')">&uarr;</button>
-            <button class="map-control" id="pan-down" @click="panMap('down')">&darr;</button>
-            <button class="map-control" id="pan-left" @click="panMap('left')">&larr;</button>
-            <button class="map-control" id="pan-right" @click="panMap('right')">&rarr;</button>
-            <button class="map-control" id="zoom-in" @click="zoomMap('in')">+</button>
-            <button class="map-control" id="zoom-out" @click="zoomMap('out')">-</button>
+            <button class="map-control-btn" id="pan-up" @click="panMap('up')">&uarr;</button>
+            <button class="map-control-btn" id="pan-down" @click="panMap('down')">&darr;</button>
+            <button class="map-control-btn" id="pan-left" @click="panMap('left')">&larr;</button>
+            <button class="map-control-btn" id="pan-right" @click="panMap('right')">&rarr;</button>
+            <div class="zoom-control-container">
+                <button class="map-control-btn zoom-controls" id="zoom-in" @click="zoomMap('in')">+</button>
+                <button class="map-control-btn zoom-controls" id="zoom-out" @click="zoomMap('out')">-</button>
+            </div>
+            <button class="map-control-btn back-to-map" v-if="zoomed" @click="zoomOutFully">Default Map</button>
         </div>
-        <button class="map-control" to="/" v-if="zoomed" @click="zoomOutFully">Default Map</button>
+
     </div>
     <div class="map-image" @click="handleSvgClick" @mousemove="displayTip" v-if="mapImage">
         <mapImage @vue:mounted="setSelector"></mapImage>
@@ -192,7 +194,7 @@ onMounted(() => {
 <style scoped>
 .map-control-container {
     position: absolute;
-    z-index: 5;
+    z-index: 6;
     top: 0.5rem;
     left: 0.5rem;
     display: flex;
@@ -206,7 +208,8 @@ onMounted(() => {
         ". p-up ."
         "p-left . p-right"
         ". p-down ."
-        "z-in . z-out";
+        "zoom zoom zoom"
+        "back back back";
     grid-template-columns: repeat(3, 1fr);
     background-color: var(--color-sidebar-bg);
     color: var(--color-text);
@@ -214,14 +217,14 @@ onMounted(() => {
     border-radius: 0.25rem;
 }
 
-.map-control {
-    border-radius: 0.5rem;
+.map-control-btn {
+    border-radius: 0.25rem;
     padding: 0.25rem;
-    border: none;
+    border: 1px solid var(--color-text);
     cursor: pointer;
 }
 
-.map-control:hover {
+.map-control-btn:hover {
     background-color: var(--color-sidebar-bg);
     color: var(--color-text);
 }
@@ -236,13 +239,15 @@ onMounted(() => {
     justify-self: center;
 }
 
-/* grid-area-name grid-row-start / grid-column-start / grid-row-end / grid-column-end */
-#zoom-in {
-    grid-area: z-in;
+.zoom-control-container {
+    grid-area: zoom;
+    display: flex;
+    padding-top: 0.5rem;
+    gap: 0.25rem;
 }
 
-#zoom-out {
-    grid-area: z-out;
+.zoom-controls {
+    flex: 1;
 }
 
 #pan-up {
@@ -259,6 +264,11 @@ onMounted(() => {
 
 #pan-right {
     grid-area: p-right;
+}
+
+.back-to-map {
+    grid-area: back;
+    margin-top: 1rem;
 }
 
 .tooltip {
