@@ -10,7 +10,7 @@
   --color-border: rgba(0, 0, 0, 0.33);
   --color-border-highlight: rgba(0, 0, 0, 0.66);
 
-  --color-text: rgb(255, 255, 255);
+  --color-text: rgb(230, 230, 230);
 }
 
 *,
@@ -41,6 +41,7 @@ a {
   font-size: 1rem;
   cursor: pointer;
   text-decoration: none;
+  border-radius: 0.5rem;
 }
 
 #app {
@@ -67,13 +68,14 @@ path {
   cursor: pointer;
   transition: fill 0.3s ease, stroke 0.3s ease;
   animation: fadeIn 0.2s ease-in forwards;
+  stroke-width: 0.75;
 }
 
 path:hover,
 .selected {
   fill: var(--color-map-highlight);
   stroke: var(--color-border-highlight);
-  stroke-width: 1.25;
+  stroke-width: 0.75;
 }
 
 .invis {
