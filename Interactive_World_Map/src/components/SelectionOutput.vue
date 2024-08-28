@@ -18,7 +18,7 @@ const countryData = reactive({
 //Get search from countrySearch.vue using pinia???? 
 //Using search data, call API for country data???
 async function getData(id) {
-  const req = await fetch(`http://api.worldbank.org/v2/country/${id}?format=json`);
+  const req = await fetch(`https://api.worldbank.org/v2/country/${id}?format=json`);
   const data = await req.json();
   console.log(data)
   countryData.id = data[1][0].id
