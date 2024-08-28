@@ -92,7 +92,7 @@ function handleSvgClick(event) {
             currentViewBox.height = newVb.height
             currentViewBox.x = newVb.x;
             currentViewBox.y = newVb.y;
-            updateViewBox(0.2)
+            updateViewBox(0.2);
         }
         emit('countrySvgId', elId);
     }
@@ -103,7 +103,7 @@ function zoomOutFully() {
     currentViewBox.y = defaultViewBox.y;
     currentViewBox.width = defaultViewBox.width;
     currentViewBox.height = defaultViewBox.height;
-    updateViewBox(0)
+    updateViewBox(0);
     router.push('/');
     zoomAmt.value = 1;
 };
@@ -122,21 +122,21 @@ function toggleSelection(elem = '') {
     });
 };
 
-function resetMap(){
+function resetMap() {
     toggleSelection();
     zoomOutFully();
-}
+};
 
 function zoomMap(dir) {
     let zoomFactor = 1;
     if (dir == 'in' && zoomAmt.value < 7) {
         zoomAmt.value += 1;
         zoomFactor = 0.7;
-    } else if(dir == 'out' && zoomAmt.value > 1) {
+    } else if (dir == 'out' && zoomAmt.value > 1) {
         zoomAmt.value -= 1;
         zoomFactor = 1.3;
-    } else if(dir == 'out' && zoomAmt.value == 1) {
-        zoomOutFully()
+    } else if (dir == 'out' && zoomAmt.value == 1) {
+        zoomOutFully();
     }
     const centerX = currentViewBox.x + currentViewBox.width / 2;
     const centerY = currentViewBox.y + currentViewBox.height / 2;
@@ -148,9 +148,7 @@ function zoomMap(dir) {
 };
 
 function panMap(dir) {
-    console.log(zoomAmt)
-    let panFactor = 1 / zoomAmt.value
-    console.log(panFactor)
+    let panFactor = 1 / zoomAmt.value;
     switch (dir) {
         case "up":
             currentViewBox.y -= 150 * panFactor;
@@ -165,7 +163,7 @@ function panMap(dir) {
             currentViewBox.x += 150 * panFactor;
             break;
     }
-    updateViewBox(0)
+    updateViewBox(0);
 };
 
 onMounted(() => {
