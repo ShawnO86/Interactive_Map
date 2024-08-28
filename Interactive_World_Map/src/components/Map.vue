@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref, shallowRef } from 'vue';
+import { useRouter } from 'vue-router';
 import { gsap } from 'gsap/gsap-core';
 
 
@@ -20,6 +21,7 @@ const tooltip = reactive({
 const mapImage = shallowRef('');
 const mapChanged = ref(false);
 const countryView = ref(false);
+const router = useRouter();
 let mapElement;
 
 async function loadMap() {
@@ -102,6 +104,7 @@ function zoomOutFully() {
     currentViewBox.width = defaultViewBox.width;
     currentViewBox.height = defaultViewBox.height;
     updateViewBox(0)
+    router.push('/');
 };
 
 function toggleSelection(elem = '') {

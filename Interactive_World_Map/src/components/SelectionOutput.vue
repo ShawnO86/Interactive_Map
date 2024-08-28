@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive } from 'vue';
+import { onMounted, onUpdated, reactive, ref, watch } from 'vue';
 
 //prop sent through route url (/country/countryId)
 const props = defineProps({
@@ -8,36 +8,71 @@ const props = defineProps({
     required: true
   }
 });
+
 const countryData = reactive({
   id: '',
   name: '',
   capital: '',
   region: '',
   income: '',
-})
-//Get search from countrySearch.vue using pinia???? 
-//Using search data, call API for country data???
-async function getData(id) {
-  const req = await fetch(`https://api.worldbank.org/v2/country/${id}?format=json`);
-  const data = await req.json();
-  console.log(data)
-  countryData.id = data[1][0].id
+});
+
+const errMsg = ref('');
+
+async function getData(url) {
+  //calls argument url and waits for data
+  const req = await fetch(url);
+  try {
+    //return api data in JSON
+    const data = await req.json();
+    return data;
+  } catch (e) {
+    console.log('error', e);
+    errMsg.value = 'Error getting country data. Please try again later.';
+  }
 }
 
+async function getCountryInfo(id) {
+  const data = await getData(`https://api.worldbank.org/v2/country/${id}?format=json`);
+  try {
+    console.log(data[1][0])
+    countryData.id = data[1][0].id;
+    countryData.name = data[1][0].name;
+    countryData.capital = data[1][0].capitalCity;
+    countryData.region = data[1][0].region.value;
+    countryData.income = data[1][0].incomeLevel.value;
+  } catch (e) {
+    console.log('error:', e)
+    errMsg.value = 'No data available for this country.';
+    countryData.id = '';
+    countryData.name = '';
+    countryData.capital = '';
+    countryData.region = '';
+    countryData.income = '';
+  }
+};
+
+watch(() => props.countryId, () => {
+  getCountryInfo(props.countryId);
+});
+
 onMounted(() => {
-  getData(props.countryId);
-})
+  getCountryInfo(props.countryId);
+});
 
 </script>
 
 <template>
   <div class="country-data-container" v-if="countryData.id">
-    <RouterLink to="/">Back To Search</RouterLink>
-    <p>{{ countryData.id }}</p>
+    <h2>{{ countryData.name }}</h2>
+    <p>Capital: {{ countryData.capital }}</p>
+    <p>Region: {{ countryData.region }}</p>
+    <p>Income: {{ countryData.income }}</p>
   </div>
 
   <div v-else>
-    <p>Loading Country Data... </p>
+    <p v-if="errMsg">{{ errMsg }}</p>
+    <p v-else>Loading Country Data... </p>
   </div>
 </template>
 
