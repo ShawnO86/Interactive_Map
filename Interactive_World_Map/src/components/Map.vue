@@ -21,6 +21,7 @@ const tooltip = reactive({
 const mapImage = shallowRef('');
 const mapChanged = ref(false);
 const countryView = ref(false);
+const zoomAmt = ref(1)
 const router = useRouter();
 let mapElement;
 
@@ -98,13 +99,13 @@ function handleSvgClick(event) {
 };
 
 function zoomOutFully() {
-    toggleSelection()
     currentViewBox.x = defaultViewBox.x;
     currentViewBox.y = defaultViewBox.y;
     currentViewBox.width = defaultViewBox.width;
     currentViewBox.height = defaultViewBox.height;
     updateViewBox(0)
     router.push('/');
+    zoomAmt.value = 1;
 };
 
 function toggleSelection(elem = '') {
@@ -121,8 +122,22 @@ function toggleSelection(elem = '') {
     });
 };
 
+function resetMap(){
+    toggleSelection();
+    zoomOutFully();
+}
+
 function zoomMap(dir) {
-    const zoomFactor = dir == "in" ? 0.75 : 1.25;
+    let zoomFactor = 1;
+    if (dir == 'in' && zoomAmt.value < 7) {
+        zoomAmt.value += 1;
+        zoomFactor = 0.7;
+    } else if(dir == 'out' && zoomAmt.value > 1) {
+        zoomAmt.value -= 1;
+        zoomFactor = 1.3;
+    } else if(dir == 'out' && zoomAmt.value == 1) {
+        zoomOutFully()
+    }
     const centerX = currentViewBox.x + currentViewBox.width / 2;
     const centerY = currentViewBox.y + currentViewBox.height / 2;
     currentViewBox.width *= zoomFactor;
@@ -133,18 +148,21 @@ function zoomMap(dir) {
 };
 
 function panMap(dir) {
+    console.log(zoomAmt)
+    let panFactor = 1 / zoomAmt.value
+    console.log(panFactor)
     switch (dir) {
         case "up":
-            currentViewBox.y -= 25
+            currentViewBox.y -= 150 * panFactor;
             break;
         case "down":
-            currentViewBox.y += 25
+            currentViewBox.y += 150 * panFactor;
             break;
         case "left":
-            currentViewBox.x -= 25
+            currentViewBox.x -= 150 * panFactor;
             break;
         case "right":
-            currentViewBox.x += 25
+            currentViewBox.x += 150 * panFactor;
             break;
     }
     updateViewBox(0)
@@ -169,7 +187,7 @@ onMounted(() => {
                 <button class="map-control-btn zoom-controls" id="zoom-in" @click="zoomMap('in')">+</button>
                 <button class="map-control-btn zoom-controls" id="zoom-out" @click="zoomMap('out')">-</button>
             </div>
-            <button class="map-control-btn back-to-map" v-if="mapChanged" @click="zoomOutFully">Reset Map</button>
+            <button class="map-control-btn back-to-map" v-if="mapChanged" @click="resetMap">Reset Map</button>
         </div>
 
     </div>
