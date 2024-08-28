@@ -18,7 +18,7 @@ const tooltip = reactive({
 });
 
 const mapImage = shallowRef('');
-const zoomed = ref(false);
+const mapChanged = ref(false);
 const countryView = ref(false);
 let mapElement;
 
@@ -65,6 +65,11 @@ function updateViewBox(delayAmt) {
     const vbString = `${currentViewBox.x} ${currentViewBox.y} ${currentViewBox.width} ${currentViewBox.height}`;
     let moveTween = gsap.to('#world-map', { delay: delayAmt, duration: 0.2, attr: { viewBox: vbString }, ease: "power1.in" });
     moveTween.play();
+    if (currentViewBox.width != defaultViewBox.width || currentViewBox.x != defaultViewBox.x || currentViewBox.y != defaultViewBox.y) {
+        mapChanged.value = true;
+    } else {
+        mapChanged.value = false;
+    }
 }
 
 function handleSvgClick(event) {
@@ -86,7 +91,6 @@ function handleSvgClick(event) {
             currentViewBox.y = newVb.y;
             updateViewBox(0.2)
         }
-        zoomed.value = true;
         emit('countrySvgId', elId);
     }
 };
@@ -97,8 +101,6 @@ function zoomOutFully() {
     currentViewBox.y = defaultViewBox.y;
     currentViewBox.width = defaultViewBox.width;
     currentViewBox.height = defaultViewBox.height;
-    zoomed.value = false;
-    countryView.value = false;
     updateViewBox(0)
 };
 
@@ -124,13 +126,7 @@ function zoomMap(dir) {
     currentViewBox.height *= zoomFactor;
     currentViewBox.x = centerX - currentViewBox.width / 2;
     currentViewBox.y = centerY - currentViewBox.height / 2;
-    if (defaultViewBox.width != currentViewBox.width) {
-        zoomed.value = true;
-    } else {
-        zoomed.value = false;
-    }
     updateViewBox(0);
-
 };
 
 function panMap(dir) {
@@ -170,7 +166,7 @@ onMounted(() => {
                 <button class="map-control-btn zoom-controls" id="zoom-in" @click="zoomMap('in')">+</button>
                 <button class="map-control-btn zoom-controls" id="zoom-out" @click="zoomMap('out')">-</button>
             </div>
-            <button class="map-control-btn back-to-map" v-if="zoomed" @click="zoomOutFully">Reset Map</button>
+            <button class="map-control-btn back-to-map" v-if="mapChanged" @click="zoomOutFully">Reset Map</button>
         </div>
 
     </div>
