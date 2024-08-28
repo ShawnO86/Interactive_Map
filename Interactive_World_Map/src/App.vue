@@ -1,8 +1,8 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, defineAsyncComponent } from 'vue';
 import { useRouter } from 'vue-router';
-import MapView from './components/Map.vue';
 
+const mapView = defineAsyncComponent(() => import('./components/Map.vue'));
 const router = useRouter();
 
 //Gets emit from Map.vue to send to SelectionOutput.vue dynamically
@@ -18,7 +18,7 @@ onMounted(() => {
 
 <template>
   <section class="map-container">
-    <MapView @countrySvgId="goToCountryPage"></MapView>
+    <map-view @countrySvgId="goToCountryPage"></map-view>
   </section>
 
   <section class="cur-page">
