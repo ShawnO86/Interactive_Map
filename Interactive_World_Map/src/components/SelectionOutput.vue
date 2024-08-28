@@ -9,12 +9,19 @@ const props = defineProps({
   }
 });
 const countryData = reactive({
-  name: props.countryId
+  id: '',
+  name: '',
+  capital: '',
+  region: '',
+  income: '',
 })
 //Get search from countrySearch.vue using pinia???? 
 //Using search data, call API for country data???
 async function getData(id) {
-
+  const req = await fetch(`http://api.worldbank.org/v2/country/${id}?format=json`);
+  const data = await req.json();
+  console.log(data)
+  countryData.id = data[1][0].id
 }
 
 onMounted(() => {
@@ -24,12 +31,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="country-data-container" v-if="countryData.name">
+  <div class="country-data-container" v-if="countryData.id">
     <RouterLink to="/">Back To Search</RouterLink>
+    <p>{{ countryData.id }}</p>
   </div>
 
-  <div>
-    <p>Loading Country Data...</p>
+  <div v-else>
+    <p>Loading Country Data... </p>
   </div>
 </template>
 
