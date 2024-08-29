@@ -1,10 +1,10 @@
 <script setup>
 import { onMounted, reactive, ref, shallowRef } from 'vue';
-import { useRouter } from 'vue-router';
 import { gsap } from 'gsap/gsap-core';
 
 
 const emit = defineEmits(['countrySvgId', 'zoomedOut']);
+
 const defaultViewBox = {
     x: 0,
     y: 0,
@@ -12,6 +12,7 @@ const defaultViewBox = {
     height: 665
 };
 const currentViewBox = { ...defaultViewBox };
+
 const tooltip = reactive({
     text: '',
     top: 0,
@@ -19,11 +20,14 @@ const tooltip = reactive({
 });
 
 const mapImage = shallowRef('');
+const lastSelected = shallowRef('');
 const mapChanged = ref(false);
 const countryView = ref(false);
-const zoomAmt = ref(1)
-const router = useRouter();
+const zoomAmt = ref(1);
+
+
 let mapElement;
+let mapElementPaths;
 
 async function loadMap() {
     //import svg as component
@@ -33,6 +37,7 @@ async function loadMap() {
 
 function setSelector() {
     mapElement = document.getElementById('world-map')
+    mapElementPaths = mapElement.childNodes;
 }
 
 //display tooltip of country name while changing position with mouse cursor
@@ -80,8 +85,9 @@ function handleSvgClick(event) {
     if (element.tagName == 'path') {
         const elId = element.getAttribute('id');
         const newVb = element.getBBox();
-        toggleSelection(element);
+        toggleInvis(element);
         element.classList.add('selected');
+        lastSelected.value = element;
         //adds 80px to zoomed country final viewBox width
         if (newVb.width < 500) {
             newVb.width += 80
@@ -104,14 +110,11 @@ function zoomOutFully() {
     currentViewBox.width = defaultViewBox.width;
     currentViewBox.height = defaultViewBox.height;
     updateViewBox(0);
-    router.push('/');
     zoomAmt.value = 1;
 };
 
-function toggleSelection(elem = '') {
-    const mapElementPaths = mapElement.childNodes;
+function toggleInvis(elem = '') {
     mapElementPaths.forEach(node => {
-        node.classList.remove('selected');
         if (elem && node != elem) {
             node.classList.add('invis');
         } else {
@@ -123,8 +126,12 @@ function toggleSelection(elem = '') {
 };
 
 function resetMap() {
-    toggleSelection();
+    toggleInvis();
     zoomOutFully();
+    if (lastSelected.value) {
+        lastSelected.value.classList.remove('selected');
+        lastSelected.value = '';
+    }
 };
 
 function zoomMap(dir) {
@@ -135,7 +142,8 @@ function zoomMap(dir) {
     } else if (dir == 'out' && zoomAmt.value > 1) {
         zoomAmt.value -= 1;
         zoomFactor = 1.3;
-    } else if (dir == 'out' && zoomAmt.value == 1) {
+    } else if (dir == 'out' && zoomAmt.value == 1 && !lastSelected.value) {
+        //resets map if a country isnt selected onClick of (-) zoom btn
         zoomOutFully();
     }
     const centerX = currentViewBox.x + currentViewBox.width / 2;
