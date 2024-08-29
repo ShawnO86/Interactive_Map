@@ -138,7 +138,8 @@ function zoomMap(dir) {
         zoomFactor = 0.7;
     } else if (dir == 'out' && zoomAmt.value > 1) {
         zoomAmt.value -= 1;
-        zoomFactor = 1.3;
+        //inverse of zoom-in value
+        zoomFactor = 1 / 0.7;
     } else if (dir == 'out' && zoomAmt.value == 1 && !lastSelected.value) {
         //resets map if a country isnt selected onClick of (-) zoom btn
         zoomOutFully();
