@@ -35,7 +35,7 @@ async function getData(url) {
 async function getCountryInfo(id) {
   const data = await getData(`https://api.worldbank.org/v2/country/${id}?format=json`);
   try {
-    console.log(data[1][0])
+    //console.log(data[1][0])
     countryData.id = data[1][0].id;
     countryData.name = data[1][0].name;
     countryData.capital = data[1][0].capitalCity;
@@ -52,13 +52,13 @@ async function getCountryInfo(id) {
   }
 };
 
-watch(() => props.countryId, () => {
+/* watch(() => props.countryId, () => {
   getCountryInfo(props.countryId);
-});
+}); */
 
-onMounted(() => {
+/* onMounted(() => {
   getCountryInfo(props.countryId);
-});
+}); */
 
 </script>
 
