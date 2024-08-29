@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUpdated, reactive, ref, watch } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 
 //prop sent through route url (/country/countryId)
 const props = defineProps({
@@ -32,6 +32,7 @@ async function getData(url) {
   }
 }
 
+//does this need to be async?
 async function getCountryInfo(id) {
   const data = await getData(`https://api.worldbank.org/v2/country/${id}?format=json`);
   try {

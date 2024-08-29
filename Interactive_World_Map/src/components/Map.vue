@@ -3,7 +3,7 @@ import { onMounted, reactive, ref, shallowRef } from 'vue';
 import { gsap } from 'gsap/gsap-core';
 
 
-const emit = defineEmits(['countrySvgId', 'zoomedOut']);
+const emit = defineEmits(['countrySvgId']);
 
 const defaultViewBox = {
     x: 0,
@@ -18,13 +18,10 @@ const tooltip = reactive({
     top: 0,
     left: 0
 });
-
 const mapImage = shallowRef('');
 const lastSelected = shallowRef('');
 const mapChanged = ref(false);
-const countryView = ref(false);
 const zoomAmt = ref(1);
-
 
 let mapElement;
 let mapElementPaths;
@@ -38,7 +35,7 @@ async function loadMap() {
 function setSelector() {
     mapElement = document.getElementById('world-map')
     mapElementPaths = mapElement.childNodes;
-}
+};
 
 //display tooltip of country name while changing position with mouse cursor
 function displayTip(event) {
@@ -78,7 +75,7 @@ function updateViewBox(delayAmt) {
     } else {
         mapChanged.value = false;
     }
-}
+};
 
 function handleSvgClick(event) {
     const element = event.target;
@@ -156,6 +153,7 @@ function zoomMap(dir) {
 };
 
 function panMap(dir) {
+    //zoomAmt reduces distance map can pan if zoomed in
     let panFactor = 1 / zoomAmt.value;
     switch (dir) {
         case "up":
@@ -181,7 +179,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <!-- Handles display of Map SVG - defines click events and mousemove/hover events for tooltip reaction -->
+    <!-- Handles display of Map SVG and defines click events and mousemove/hover events for tooltip reaction and map controls-->
     <div class="map-control-container">
         <div class="map-controls">
             <p id="map-controls-head">Map Controls</p>
@@ -195,8 +193,8 @@ onMounted(() => {
             </div>
             <button class="map-control-btn back-to-map" v-if="mapChanged" @click="resetMap">Reset Map</button>
         </div>
-
     </div>
+
     <div class="map-image" @click="handleSvgClick" @mousemove="displayTip" v-if="mapImage">
         <mapImage @vue:mounted="setSelector"></mapImage>
     </div>
