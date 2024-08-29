@@ -38,8 +38,7 @@ onMounted(() => {
 }
 
 .cur-page {
-  width: 25vw;
-  max-width: 30rem;
+  width: clamp(16rem, 30vw, 30rem);
   padding: 1rem;
   background-color: var(--color-sidebar-bg);
 }
