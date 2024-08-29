@@ -102,8 +102,6 @@ function handleSvgClick(event) {
 };
 
 function zoomOutFully() {
-    currentViewBox.x = defaultViewBox.x;
-    currentViewBox.y = defaultViewBox.y;
     currentViewBox.width = defaultViewBox.width;
     currentViewBox.height = defaultViewBox.height;
     updateViewBox(0);
@@ -123,6 +121,8 @@ function toggleInvis(elem = '') {
 };
 
 function resetMap() {
+    currentViewBox.x = defaultViewBox.x;
+    currentViewBox.y = defaultViewBox.y;
     toggleInvis();
     zoomOutFully();
     if (lastSelected.value) {
@@ -140,17 +140,16 @@ function zoomMap(dir) {
         zoomAmt.value -= 1;
         //inverse of zoom-in value
         zoomFactor = 1 / 0.7;
-    } else if (dir == 'out' && zoomAmt.value == 1 && !lastSelected.value) {
-        //resets map if a country isnt selected onClick of (-) zoom btn
-        zoomOutFully();
     }
-    const centerX = currentViewBox.x + currentViewBox.width / 2;
-    const centerY = currentViewBox.y + currentViewBox.height / 2;
-    currentViewBox.width *= zoomFactor;
-    currentViewBox.height *= zoomFactor;
-    currentViewBox.x = centerX - currentViewBox.width / 2;
-    currentViewBox.y = centerY - currentViewBox.height / 2;
-    updateViewBox(0);
+    if (zoomFactor != 1) {
+        const centerX = currentViewBox.x + currentViewBox.width / 2;
+        const centerY = currentViewBox.y + currentViewBox.height / 2;
+        currentViewBox.width *= zoomFactor;
+        currentViewBox.height *= zoomFactor;
+        currentViewBox.x = centerX - currentViewBox.width / 2;
+        currentViewBox.y = centerY - currentViewBox.height / 2;
+        updateViewBox(0);
+    }
 };
 
 function panMap(dir) {
@@ -182,8 +181,9 @@ onMounted(() => {
 <template>
     <!-- Handles display of Map SVG and defines click events and mousemove/hover events for tooltip reaction and map controls-->
     <div class="map-control-container">
-        <div class="map-controls">
-            <p id="map-controls-head">Map Controls</p>
+        <button class="map-control-btn back-to-map" v-if="mapChanged" @click="resetMap">Reset Map</button>
+        <div class="map-controls" v-if="!lastSelected">
+            <p id="map-controls-head">Map Control</p>
             <button class="map-control-btn" id="pan-up" @click="panMap('up')">&uarr;</button>
             <button class="map-control-btn" id="pan-down" @click="panMap('down')">&darr;</button>
             <button class="map-control-btn" id="pan-left" @click="panMap('left')">&larr;</button>
@@ -192,7 +192,6 @@ onMounted(() => {
                 <button class="map-control-btn zoom-controls" id="zoom-in" @click="zoomMap('in')">+</button>
                 <button class="map-control-btn zoom-controls" id="zoom-out" @click="zoomMap('out')">-</button>
             </div>
-            <button class="map-control-btn back-to-map" v-if="mapChanged" @click="resetMap">Reset Map</button>
         </div>
     </div>
 
@@ -213,10 +212,11 @@ onMounted(() => {
 .map-control-container {
     position: absolute;
     z-index: 6;
-    top: 0.5rem;
-    left: 0.5rem;
+    bottom: clamp(0rem, 0.5vw, 1rem);
+    left: clamp(0rem, 0.5vw, 1rem);
     display: flex;
     flex-direction: column;
+    width: 7rem;
 }
 
 .map-controls {
@@ -226,12 +226,11 @@ onMounted(() => {
         ". p-up ."
         "p-left . p-right"
         ". p-down ."
-        "zoom zoom zoom"
-        "back back back";
+        "zoom zoom zoom";
     grid-template-columns: repeat(3, 1fr);
     background-color: var(--color-sidebar-bg);
     color: var(--color-text);
-    padding: 0.75rem;
+    padding: clamp(1px, 0.5vw, 0.5rem);
     border-radius: 0.25rem;
 }
 
@@ -253,8 +252,8 @@ onMounted(() => {
 
 #map-controls-head {
     grid-area: head;
-    padding-bottom: 1rem;
-    justify-self: center;
+    padding-bottom: clamp(0.5rem, 1vw, 1rem);
+    text-align: center;
 }
 
 .zoom-control-container {
@@ -285,8 +284,8 @@ onMounted(() => {
 }
 
 .back-to-map {
-    grid-area: back;
     margin-top: 1rem;
+    width: 100%;
 }
 
 .tooltip {
