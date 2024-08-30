@@ -1,7 +1,6 @@
 import './assets/main.css';
 
 import { createApp } from 'vue';
-import { createPinia } from 'pinia';
 import { createWebHistory, createRouter } from 'vue-router';
 import App from './App.vue';
 import Search from './components/CountrySearch.vue';
@@ -18,6 +17,5 @@ const router = createRouter({
 
 const app = createApp(App);
 
-app.use(createPinia());
 app.use(router);
 app.mount("#app");
