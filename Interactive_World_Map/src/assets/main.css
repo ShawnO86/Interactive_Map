@@ -3,6 +3,7 @@
   --color-background: rgb(45, 64, 108);
   --color-tooltip-bg: rgba(0, 0, 0, 0.66);
   --color-sidebar-bg: rgba(100, 100, 100, .66);
+  --color-transparent-btn: rgba(255, 255, 255, .66);
 
   --color-map: rgba(150, 150, 150);
   --color-map-highlight: rgb(100, 100, 100);
@@ -10,7 +11,8 @@
   --color-border: rgba(0, 0, 0, 0.33);
   --color-border-highlight: rgba(0, 0, 0, 0.66);
 
-  --color-text: rgb(230, 230, 230);
+  --color-white-text: rgb(230, 230, 230);
+  --color-black-text: rgb(33, 33, 33);
 }
 
 *,
@@ -22,7 +24,7 @@
 }
 
 body {
-  color: var(--color-text);
+  color: var(--color-white-text);
   background: var(--color-background);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -36,7 +38,7 @@ main {
 a {
   border: none;
   background-color: var(--color-tooltip-bg);
-  color: var(--color-text);
+  color: var(--color-white-text);
   cursor: pointer;
 }
 
@@ -52,53 +54,33 @@ a {
   height: 100%;
 }
 
-.map-image {
-  height: 100%;
-  width: 100%;
-  position: relative;
-}
-
-path {
+#world-map path {
   fill: var(--color-map);
   stroke: var(--color-border);
-  cursor: pointer;
   transition: fill 0.3s ease, stroke 0.3s ease;
-  animation: fadeIn 0.2s ease-in forwards;
   stroke-width: 0.75;
 }
 
-path:hover,
-.selected {
+#world-map path:hover,
+#world-map .selected {
   fill: var(--color-map-highlight);
   stroke: var(--color-border-highlight);
   stroke-width: 0.75;
 }
 
-.invis {
-  animation: fadeOut 0.2s forwards;
+#world-map .selected {
+  cursor: zoom-out;
 }
 
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
-  }
-
-  99% {
-    opacity: 0;
-  }
-  100% {
-    display: none;
-  }
+#world-map .normal {
+  cursor: zoom-in;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.2s 0.2s, visibility 0.2s 0.2s;
 }
 
-@keyframes fadeIn {
-  0% {
-    display: none;
-  }
-  1% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+#world-map .invis {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
 }

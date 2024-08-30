@@ -79,25 +79,33 @@ function updateViewBox(delayAmt) {
 
 function handleSvgClick(event) {
     const element = event.target;
-    if (element.tagName == 'path') {
+    if (element.tagName == 'path' && !element.classList.contains('selected')) {
         const elId = element.getAttribute('id');
         const newVb = element.getBBox();
         toggleInvis(element);
+        if (lastSelected.value) {
+            lastSelected.value.classList.remove('selected');
+            lastSelected.value = '';
+        }
         element.classList.add('selected');
+        element.classList.remove('normal')
         lastSelected.value = element;
+        zoomAmt.value = 5;
         //adds 80px to zoomed country final viewBox width
         if (newVb.width < 500) {
-            newVb.width += 80
-            newVb.x -= 40
+            newVb.width += 80;
+            newVb.x -= 40;
         }
         if (newVb.width < defaultViewBox.width) {
             currentViewBox.width = newVb.width;
-            currentViewBox.height = newVb.height
+            currentViewBox.height = newVb.height;
             currentViewBox.x = newVb.x;
             currentViewBox.y = newVb.y;
             updateViewBox(0.2);
         }
         emit('countrySvgId', elId);
+    } else if (element.tagName == 'path' && element.classList.contains('selected')) {
+        resetMap()
     }
 };
 
@@ -112,10 +120,10 @@ function toggleInvis(elem = '') {
     mapElementPaths.forEach(node => {
         if (elem && node != elem) {
             node.classList.add('invis');
+            node.classList.remove('normal');
         } else {
-            setTimeout(() => {
-                node.classList.remove('invis');
-            }, 200);
+            node.classList.remove('invis');
+            node.classList.add('normal');
         }
     });
 };
@@ -123,12 +131,13 @@ function toggleInvis(elem = '') {
 function resetMap() {
     currentViewBox.x = defaultViewBox.x;
     currentViewBox.y = defaultViewBox.y;
-    toggleInvis();
-    zoomOutFully();
+    zoomAmt.value = 1;
     if (lastSelected.value) {
         lastSelected.value.classList.remove('selected');
         lastSelected.value = '';
     }
+    toggleInvis();
+    zoomOutFully();
 };
 
 function zoomMap(dir) {
@@ -138,7 +147,7 @@ function zoomMap(dir) {
         zoomFactor = 0.7;
     } else if (dir == 'out' && zoomAmt.value > 1) {
         zoomAmt.value -= 1;
-        //inverse of zoom-in value
+        //inverse of zoom-in zoomFactor
         zoomFactor = 1 / 0.7;
     }
     if (zoomFactor != 1) {
@@ -175,15 +184,14 @@ function panMap(dir) {
 onMounted(() => {
     loadMap();
 });
-
 </script>
 
 <template>
     <!-- Handles display of Map SVG and defines click events and mousemove/hover events for tooltip reaction and map controls-->
     <div class="map-control-container">
-        <button class="map-control-btn back-to-map" v-if="mapChanged" @click="resetMap">Reset Map</button>
-        <div class="map-controls" v-if="!lastSelected">
+        <div class="map-controls">
             <p id="map-controls-head">Map Control</p>
+            <button class="map-control-btn back-to-map" v-if="mapChanged" @click="resetMap">Reset Map</button>
             <button class="map-control-btn" id="pan-up" @click="panMap('up')">&uarr;</button>
             <button class="map-control-btn" id="pan-down" @click="panMap('down')">&darr;</button>
             <button class="map-control-btn" id="pan-left" @click="panMap('left')">&larr;</button>
@@ -195,7 +203,7 @@ onMounted(() => {
         </div>
     </div>
 
-    <div class="map-image" @click="handleSvgClick" @mousemove="displayTip" v-if="mapImage">
+    <div class="map-image-container" @click="handleSvgClick" @mousemove="displayTip" v-if="mapImage">
         <mapImage @vue:mounted="setSelector"></mapImage>
     </div>
 
@@ -209,6 +217,12 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.map-image-container {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
 .map-control-container {
     position: absolute;
     z-index: 6;
@@ -223,12 +237,12 @@ onMounted(() => {
     display: grid;
     grid-template-areas:
         "head head head"
+        "back back back"
         ". p-up ."
         "p-left . p-right"
         ". p-down ."
         "zoom zoom zoom";
     grid-template-columns: repeat(3, 1fr);
-    background-color: var(--color-sidebar-bg);
     color: var(--color-text);
     padding: clamp(1px, 0.5vw, 0.5rem);
     border-radius: 0.25rem;
@@ -237,13 +251,18 @@ onMounted(() => {
 .map-control-btn {
     border-radius: 0.25rem;
     padding: 0.25rem;
-    border: 1px solid var(--color-text);
+    background-color: var(--color-sidebar-bg);
+    color: var(--color-white-text);
+    border: 1px solid var(--color-white-text);
     cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.4s;
 }
 
 .map-control-btn:hover {
-    background-color: var(--color-sidebar-bg);
-    color: var(--color-text);
+    background-color: var(--color-transparent-btn);
+    color: var(--color-black-text);
+    border: 1px solid var(--color-black-text);
 }
 
 .map-control:active {
@@ -284,7 +303,8 @@ onMounted(() => {
 }
 
 .back-to-map {
-    margin-top: 1rem;
+    grid-area: back;
+    margin-bottom: 0.5rem;
     width: 100%;
 }
 
@@ -293,7 +313,7 @@ onMounted(() => {
     z-index: 5;
     pointer-events: none;
     background-color: var(--color-tooltip-bg);
-    color: var(--color-text);
+    color: var(--color-white-text);
     padding: 0.5rem;
     font-size: 1.25rem;
     font-weight: 500;
