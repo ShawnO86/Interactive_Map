@@ -1,6 +1,6 @@
 # An interactive SVG world map. 
 
-[Live:] (https://interactive-map-hpyt.onrender.com)
+Live App: https://interactive-map-hpyt.onrender.com
 ---
 
 ## Current Features
