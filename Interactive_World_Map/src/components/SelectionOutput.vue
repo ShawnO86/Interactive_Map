@@ -18,6 +18,13 @@ const countryData = reactive({
 });
 
 const errMsg = ref('');
+const flagImage = ref('');
+
+async function loadFlag() {
+    //import svg as component
+    let flag = await import(`../assets/svgs/flags/${props.countryId}.svg?raw`);
+    flagImage.value = flag.default;
+};
 
 async function getData(url) {
   //calls argument url and waits for data
@@ -33,8 +40,8 @@ async function getData(url) {
 }
 
 //does this need to be async?
-async function getCountryInfo(id) {
-  const data = await getData(`https://api.worldbank.org/v2/country/${id}?format=json`);
+async function getCountryInfo() {
+  const data = await getData(`https://api.worldbank.org/v2/country/${props.countryId}?format=json`);
   try {
     //console.log(data[1][0])
     countryData.id = data[1][0].id;
@@ -53,18 +60,21 @@ async function getCountryInfo(id) {
   }
 };
 
-/* watch(() => props.countryId, () => {
-  getCountryInfo(props.countryId);
-}); */
+watch(() => props.countryId, () => {
+  getCountryInfo();
+  loadFlag();
+}); 
 
-/* onMounted(() => {
-  getCountryInfo(props.countryId);
-}); */
+onMounted(() => {
+  getCountryInfo();
+  loadFlag();
+});
 
 </script>
 
 <template>
   <div class="country-data-container" v-if="countryData.id">
+    <div v-html="flagImage"></div>
     <h2>{{ countryData.name }}</h2>
     <p>Capital: {{ countryData.capital }}</p>
     <p>Region: {{ countryData.region }}</p>

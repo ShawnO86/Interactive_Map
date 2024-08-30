@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, defineAsyncComponent } from 'vue';
+import { defineAsyncComponent } from 'vue';
 import { useRouter } from 'vue-router';
 
 const mapView = defineAsyncComponent(() => import('./components/Map.vue'));
@@ -9,10 +9,6 @@ const router = useRouter();
 function goToCountryPage(id) {
   router.push(`/country/${id}`);
 };
-
-onMounted(() => {
-  console.log("hello????")
-})
 
 </script>
 
