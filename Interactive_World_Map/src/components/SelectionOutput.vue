@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref, watch } from 'vue';
+import { RouterLink } from 'vue-router';
 
 //prop sent through route url (/country/countryId)
 const props = defineProps({
@@ -60,6 +61,10 @@ async function getCountryInfo() {
   }
 };
 
+function checkLocalForCountry() {
+  
+}
+
 watch(() => props.countryId, () => {
   getCountryInfo();
   loadFlag();
@@ -74,6 +79,7 @@ onMounted(() => {
 
 <template>
   <div class="country-data-container" v-if="countryData.id">
+    <RouterLink to="/">Back to Search</RouterLink>
     <div v-html="flagImage"></div>
     <h2>{{ countryData.name }}</h2>
     <p>Capital: {{ countryData.capital }}</p>
