@@ -83,7 +83,9 @@ function updateViewBox(delayAmt) {
 
 function handleSvgClick(event) {
     const element = event.target;
-    if (element.tagName == 'path' && !element.classList.contains('selected')) {
+    if (element.tagName == 'path' && element.classList.contains('selected') && !element.classList.contains('normal')) {
+        resetMap();
+    } else if (element.tagName == 'path') {
         const elId = element.id;
         const newVb = element.getBBox();
         toggleInvis(element);
@@ -106,8 +108,6 @@ function handleSvgClick(event) {
             updateViewBox(0.2);
         }
         emit('countrySvgId', elId);
-    } else if (element.tagName == 'path' && element.classList.contains('selected')) {
-        resetMap();
     }
 };
 
