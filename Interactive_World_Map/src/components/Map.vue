@@ -142,9 +142,11 @@ function resetMap() {
     currentViewBox.y = defaultViewBox.y;
     zoomAmt.value = 1;
     mapHeader.value = 'World Map';
-    removeSelected()
     toggleInvis();
     zoomOutFully();
+    if (route.path == "/") {
+        removeSelected();
+    }
 };
 
 function zoomMap(dir) {
