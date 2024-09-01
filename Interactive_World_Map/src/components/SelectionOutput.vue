@@ -21,9 +21,9 @@ const errMsg = ref('');
 const flagImage = ref('');
 
 async function loadFlag() {
-    //import svg as component
-    let flag = await import(`../assets/svgs/flags/${props.countryId}.svg?raw`);
-    flagImage.value = flag.default;
+  //import svg as component
+  let flag = await import(`../assets/svgs/flags/${props.countryId}.svg?raw`);
+  flagImage.value = flag.default;
 };
 
 async function getData(url) {
@@ -37,7 +37,7 @@ async function getData(url) {
     console.log('error', e);
     errMsg.value = 'Error getting country data. Please try again later.';
   }
-}
+};
 
 //does this need to be async?
 async function getCountryInfo() {
@@ -63,7 +63,7 @@ async function getCountryInfo() {
 watch(() => props.countryId, () => {
   getCountryInfo();
   loadFlag();
-}); 
+});
 
 onMounted(() => {
   getCountryInfo();
