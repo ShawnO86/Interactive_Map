@@ -42,6 +42,7 @@ async function getData(url) {
 
 //does this need to be async?
 async function getCountryInfo() {
+  checkLocalForCountry()
   const data = await getData(`https://api.worldbank.org/v2/country/${props.countryId}?format=json`);
   try {
     //console.log(data[1][0])
@@ -62,7 +63,11 @@ async function getCountryInfo() {
 };
 
 function checkLocalForCountry() {
-  
+  if (localStorage.getItem(countryData.id)) {
+    console.log('in local storage')
+  } else {
+    console.log('not in local stoage')
+  }
 }
 
 watch(() => props.countryId, () => {
