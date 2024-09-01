@@ -87,9 +87,9 @@ function handleSvgClick(event) {
         const elId = element.id;
         const newVb = element.getBBox();
         toggleInvis(element);
-        removeSelected()
+        removeSelected();
         element.classList.add('selected');
-        element.classList.remove('normal')
+        element.classList.remove('normal');
         lastSelected.value = element;
         mapHeader.value = element.getAttribute('name');
         zoomAmt.value = 5;
@@ -109,7 +109,6 @@ function handleSvgClick(event) {
     } else if (element.tagName == 'path' && element.classList.contains('selected')) {
         resetMap();
     }
-    console.log(route.path);
 };
 
 function zoomOutFully() {
