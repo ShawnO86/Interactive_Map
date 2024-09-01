@@ -1,9 +1,11 @@
 <script setup>
-import { onMounted, reactive, ref, shallowRef } from 'vue';
+import { onMounted, reactive, ref, shallowRef, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { gsap } from 'gsap/gsap-core';
 
 
 const emit = defineEmits(['countrySvgId']);
+const route = useRoute();
 
 const defaultViewBox = {
     x: 0,
@@ -22,6 +24,7 @@ const mapImage = shallowRef('');
 const lastSelected = shallowRef('');
 const mapChanged = ref(false);
 const zoomAmt = ref(1);
+const mapHeader = ref('World Map');
 
 let mapElement;
 let mapElementPaths;
@@ -33,7 +36,8 @@ async function loadMap() {
 };
 
 function setSelector() {
-    mapElement = document.getElementById('world-map')
+    //gets map selector and svg paths after map component loads
+    mapElement = document.getElementById('world-map');
     mapElementPaths = mapElement.childNodes;
 };
 
@@ -80,16 +84,14 @@ function updateViewBox(delayAmt) {
 function handleSvgClick(event) {
     const element = event.target;
     if (element.tagName == 'path' && !element.classList.contains('selected')) {
-        const elId = element.getAttribute('id');
+        const elId = element.id;
         const newVb = element.getBBox();
         toggleInvis(element);
-        if (lastSelected.value) {
-            lastSelected.value.classList.remove('selected');
-            lastSelected.value = '';
-        }
+        removeSelected()
         element.classList.add('selected');
         element.classList.remove('normal')
         lastSelected.value = element;
+        mapHeader.value = element.getAttribute('name');
         zoomAmt.value = 5;
         //adds 80px to zoomed country final viewBox width
         if (newVb.width < 500) {
@@ -105,8 +107,9 @@ function handleSvgClick(event) {
         }
         emit('countrySvgId', elId);
     } else if (element.tagName == 'path' && element.classList.contains('selected')) {
-        resetMap()
+        resetMap();
     }
+    console.log(route.path);
 };
 
 function zoomOutFully() {
@@ -128,14 +131,19 @@ function toggleInvis(elem = '') {
     });
 };
 
-function resetMap() {
-    currentViewBox.x = defaultViewBox.x;
-    currentViewBox.y = defaultViewBox.y;
-    zoomAmt.value = 1;
+function removeSelected() {
     if (lastSelected.value) {
         lastSelected.value.classList.remove('selected');
         lastSelected.value = '';
     }
+};
+
+function resetMap() {
+    currentViewBox.x = defaultViewBox.x;
+    currentViewBox.y = defaultViewBox.y;
+    zoomAmt.value = 1;
+    mapHeader.value = 'World Map';
+    removeSelected()
     toggleInvis();
     zoomOutFully();
 };
@@ -181,6 +189,12 @@ function panMap(dir) {
     updateViewBox(0);
 };
 
+watch(() => route.path, () => {
+    if (route.path == '/') {
+        resetMap();
+    }
+});
+
 onMounted(() => {
     loadMap();
 });
@@ -204,6 +218,7 @@ onMounted(() => {
     </div>
 
     <div class="map-image-container" @click="handleSvgClick" @mousemove="displayTip" v-if="mapImage">
+        <h1 class="map-image-header">{{ mapHeader }}</h1>
         <mapImage @vue:mounted="setSelector"></mapImage>
     </div>
 
@@ -211,7 +226,7 @@ onMounted(() => {
         <p>Loading World Map Image...</p>
     </div>
 
-    <div class="tooltip" v-if="tooltip.text" :style="{ top: tooltip.top + 'px', left: tooltip.left + 'px' }">
+    <div class="tooltip" v-if="tooltip.text && !lastSelected" :style="{ top: tooltip.top + 'px', left: tooltip.left + 'px' }">
         {{ tooltip.text }}
     </div>
 </template>
@@ -231,6 +246,13 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     width: 7rem;
+}
+
+.map-image-header {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-weight: 700;
 }
 
 .map-controls {
