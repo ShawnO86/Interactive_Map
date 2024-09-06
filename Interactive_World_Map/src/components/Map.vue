@@ -23,6 +23,7 @@ const tooltip = reactive({
 const mapImage = shallowRef('');
 const lastSelected = shallowRef('');
 const mapChanged = ref(false);
+const countryView = ref(false);
 const zoomAmt = ref(1);
 const mapHeader = ref('World Map');
 
@@ -39,6 +40,10 @@ function setSelector() {
     //gets map selector and svg paths after map component loads
     mapElement = document.getElementById('world-map');
     mapElementPaths = mapElement.childNodes;
+    if (route.params.countryId) {
+        const currentSelection = document.getElementById(route.params.countryId);
+        currentSelection.classList.add('selected')
+    }
 };
 
 //display tooltip of country name while changing position with mouse cursor
@@ -93,6 +98,7 @@ function handleSvgClick(event) {
         element.classList.add('selected');
         element.classList.remove('normal');
         lastSelected.value = element;
+        countryView.value = true;
         mapHeader.value = element.getAttribute('name');
         zoomAmt.value = 5;
         //adds 80px to zoomed country final viewBox width
@@ -144,6 +150,7 @@ function resetMap() {
     mapHeader.value = 'World Map';
     toggleInvis();
     zoomOutFully();
+    countryView.value = false;
     if (route.path == "/") {
         removeSelected();
     }
@@ -199,6 +206,7 @@ watch(() => route.path, () => {
 onMounted(() => {
     loadMap();
 });
+
 </script>
 
 <template>
@@ -227,7 +235,7 @@ onMounted(() => {
         <p>Loading World Map Image...</p>
     </div>
 
-    <div class="tooltip" v-if="tooltip.text && !lastSelected" :style="{ top: tooltip.top + 'px', left: tooltip.left + 'px' }">
+    <div class="tooltip" v-if="tooltip.text && !countryView" :style="{ top: tooltip.top + 'px', left: tooltip.left + 'px' }">
         {{ tooltip.text }}
     </div>
 </template>
