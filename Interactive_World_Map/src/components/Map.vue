@@ -41,8 +41,7 @@ function setSelector() {
     mapElement = document.getElementById('world-map');
     mapElementPaths = mapElement.childNodes;
     if (route.params.countryId) {
-        const currentSelection = document.getElementById(route.params.countryId);
-        currentSelection.classList.add('selected')
+        document.getElementById(route.params.countryId).classList.add('selected');
     }
 };
 
