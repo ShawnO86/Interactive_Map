@@ -1,15 +1,24 @@
-# An interactive SVG world map. 
+# Interactive World Map. 
 
-Live App: https://interactive-map-hpyt.onrender.com
----
+An SVG-based world map built with Vue 3.
+Clicking on any country zooms in smoothly and pulls up some live data: capital, region, and income level.
+Data is sourced from the World Bank API.
+
+**Live Demo:** https://interactive-map-hpyt.onrender.com
 
 ## Current Features
 
-- SVG interaction - Users can click on countries to zoom in using the SVG path's bounding box which is then translated into it's viewBox attribute.
-- Pan and Zoom Control - Using SVG viewBox, the user can manually pan and zoom the map, changing the relative x, y, width, and height values of the viewBox.
-- Hover Tooltip - Highlights the country and displays the country name on mouse hover. The tooltip follows the mouse cursor.
-- Animations - Utilize GSAP for smooth (zoom, pan) SVG viewBox animations. All other animations (opacity, color, etc.) are done with CSS transition for efficiency.
-- Responsive Design - SVG is inheritly responsive, layout shifts are done with Vue reactivity and CSS media queries.
-- Front-end Routing - Use of Vue-router to allow for bookmarking and navigation to a specific output or application state. Also allows for use of browser controls and history.
-- Async and "Lazy load" Components - To reduce initial load times and provide some visible parts of the page as they get loaded. The world map SVG image is quite large and could block the loading of the rest of the app while it is downloading.
-- Vite - Bundle and optimize CSS, JS, and SVG files (Vite-svg-loader loads svg files as vue components and optimizes them, reducing file size). 
+*  **Click-to-zoom navigation**: Clicking a country gets the SVG bounding box and animates the map's `viewBox` to frame it, using GSAP for smooth transitions.
+*  **Manual pan & zoom control**: Arrow buttons pan the view (scaled to the current zoom level so not too much movement), plus dedicated zoom in/out controls.
+*  **Hover tooltips**: Mousing over a country highlights it and shows its name in a tooltip that follows the cursor, with edge-aware positioning so it doesn't run off-screen.
+*  **Live country data panel**: Selecting a country fetches some basic info including: capital, region, and income level from the [World Bank API](https://api.worldbank.org/) and displays it alongside the country's flag.
+*  **Bookmarkable state via Vue Router**: Each selected country updates the URL (`/country/:id`), so views can be shared, bookmarked, or navigated to with browser back/forward.
+*  **Lazy-loaded map**: The world map SVG is large, so it's loaded asynchronously for a responsive initial load.
+*  **Optimized SVG bundling** — Vite + `vite-svg-loader` imports SVGs as Vue components and strips unnecessary bloat at build time.
+
+## Tech Stack
+
+* **Framework**: Vue 3 using the Composition API
+* **Routing**: Vue Router
+* **Animation**: GSAP
+* **Build Tool**: Vite
